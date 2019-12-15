@@ -8,13 +8,17 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class SetController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        dealCards(12)
     }
 
-
+}
+extension SetController {
+    func dealCards(_ numberOfCards: Int) {
+        
+    }
 }
 
