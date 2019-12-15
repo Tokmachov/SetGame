@@ -9,10 +9,10 @@
 import Foundation
 
 struct Card {
-    var numberOfShapes: NumberOfShapes
-    var shape: Shape
-    var shading: Shading
-    var color: Color
+    let numberOfShapes: NumberOfShapes
+    let shape: Shape
+    let shading: Shading
+    let color: Color
     enum NumberOfShapes: CaseIterable {
         case one, two, three
     }

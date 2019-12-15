@@ -15,6 +15,9 @@ struct SetGame {
         self.cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
     }
     var dealtCards = [Card]()
+    subscript(cardIndex: Int) -> Card {
+        return dealtCards[cardIndex]
+    }
     mutating func dealCards(_ numberOfCards: NumberOfCards) {
         assert(numberOfCards.rawValue <= cards.count, "Number of Cards: \(cards.count) is less then number of cards to deal: \(numberOfCards.rawValue)")
         let cardsToDeal = Array(cards.prefix(numberOfCards.rawValue))
