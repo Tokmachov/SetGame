@@ -61,8 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				04C6EA8123A4056200A7835B /* SetController.swift */,
-				04C6EA9223A40E1E00A7835B /* Set.swift */,
-				04C6EA9423A40E6400A7835B /* Card.swift */,
+				04C6EA9623A663F200A7835B /* Model */,
 				04C6EA8323A4056200A7835B /* Main.storyboard */,
 				04C6EA8B23A4056700A7835B /* Info.plist */,
 				04C6EA9123A4059700A7835B /* Other */,
@@ -79,6 +78,15 @@
 				04C6EA8823A4056700A7835B /* LaunchScreen.storyboard */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		04C6EA9623A663F200A7835B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				04C6EA9223A40E1E00A7835B /* Set.swift */,
+				04C6EA9423A40E6400A7835B /* Card.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

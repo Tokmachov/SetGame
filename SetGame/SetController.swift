@@ -12,13 +12,7 @@ class SetController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dealCards(12)
-    }
-
-}
-extension SetController {
-    func dealCards(_ numberOfCards: Int) {
         
     }
-}
 
+}

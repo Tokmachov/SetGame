@@ -8,13 +8,24 @@
 
 import Foundation
 
+
 struct SetGame {
-    var cards: [Card]
+    private var cards: [Card]
     init() {
         self.cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
     }
+    var dealtCards = [Card]()
+    mutating func dealCards(_ numberOfCards: NumberOfCards) {
+        assert(numberOfCards.rawValue <= cards.count, "Number of Cards: \(cards.count) is less then number of cards to deal: \(numberOfCards.rawValue)")
+        let cardsToDeal = Array(cards.prefix(numberOfCards.rawValue))
+        dealtCards.append(contentsOf: cardsToDeal)
+    }
 }
-
+extension SetGame {
+    enum NumberOfCards: Int {
+        case twelve = 12, three = 3
+    }
+}
 extension SetGame {
     private struct CardsFactory {
         private static var randomColors = Card.Color.allCases.shuffled()
