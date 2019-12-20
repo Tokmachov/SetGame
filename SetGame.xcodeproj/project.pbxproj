@@ -13,7 +13,7 @@
 		04C6EA8523A4056200A7835B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04C6EA8323A4056200A7835B /* Main.storyboard */; };
 		04C6EA8723A4056700A7835B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04C6EA8623A4056700A7835B /* Assets.xcassets */; };
 		04C6EA8A23A4056700A7835B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04C6EA8823A4056700A7835B /* LaunchScreen.storyboard */; };
-		04C6EA9323A40E1E00A7835B /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C6EA9223A40E1E00A7835B /* Set.swift */; };
+		04C6EA9323A40E1E00A7835B /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C6EA9223A40E1E00A7835B /* SetGame.swift */; };
 		04C6EA9523A40E6400A7835B /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C6EA9423A40E6400A7835B /* Card.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,7 +26,7 @@
 		04C6EA8623A4056700A7835B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		04C6EA8923A4056700A7835B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		04C6EA8B23A4056700A7835B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		04C6EA9223A40E1E00A7835B /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
+		04C6EA9223A40E1E00A7835B /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 		04C6EA9423A40E6400A7835B /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,7 +83,7 @@
 		04C6EA9623A663F200A7835B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				04C6EA9223A40E1E00A7835B /* Set.swift */,
+				04C6EA9223A40E1E00A7835B /* SetGame.swift */,
 				04C6EA9423A40E6400A7835B /* Card.swift */,
 			);
 			path = Model;
@@ -160,7 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04C6EA9323A40E1E00A7835B /* Set.swift in Sources */,
+				04C6EA9323A40E1E00A7835B /* SetGame.swift in Sources */,
 				04C6EA8223A4056200A7835B /* SetController.swift in Sources */,
 				04C6EA9523A40E6400A7835B /* Card.swift in Sources */,
 				04C6EA7E23A4056200A7835B /* AppDelegate.swift in Sources */,

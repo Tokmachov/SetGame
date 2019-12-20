@@ -21,6 +21,7 @@ struct SetGame {
     mutating func dealCards(_ numberOfCards: NumberOfCards) {
         assert(numberOfCards.rawValue <= cards.count, "Number of Cards: \(cards.count) is less then number of cards to deal: \(numberOfCards.rawValue)")
         let cardsToDeal = Array(cards.prefix(numberOfCards.rawValue))
+        cards.removeFirst(numberOfCards.rawValue)
         dealtCards.append(contentsOf: cardsToDeal)
     }
 }
@@ -31,10 +32,10 @@ extension SetGame {
 }
 extension SetGame {
     private struct CardsFactory {
-        private static var randomColors = Card.Color.allCases.shuffled()
-        private static var randomShadings = Card.Shading.allCases.shuffled()
-        private static var randomNumberOfShapes = Card.NumberOfShapes.allCases.shuffled()
-        private static var randomShapes = Card.Shape.allCases.shuffled()
+        private static var randomColors = Card.Color.allCases
+        private static var randomShadings = Card.Shading.allCases
+        private static var randomNumberOfShapes = Card.NumberOfShapes.allCases
+        private static var randomShapes = Card.Shape.allCases
         
         static func makeAllPossibleCardsInRandomOrder() ->[Card] {
             var cards = [Card]()
@@ -53,7 +54,7 @@ extension SetGame {
                     }
                 }
             }
-            return cards
+            return cards.shuffled()
         }
     }
 }

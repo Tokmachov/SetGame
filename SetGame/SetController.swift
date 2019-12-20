@@ -13,7 +13,7 @@ class SetController: UIViewController {
     private var setGame = SetGame() {
         didSet {
             let numberOfNewCards = setGame.dealtCards.count - oldValue.dealtCards.count
-            addNewIndicesToButtonsAndCardsIndices(for: numberOfNewCards)
+                addNewIndicesToButtonsAndCardsIndices(for: numberOfNewCards)
         }
     }
     lazy private var randomFreeButtonIndices = buttons.indices.map { $0 }.shuffled()
@@ -22,16 +22,16 @@ class SetController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupButtons()
         setGame.dealCards(.twelve)
-        updateSetBoard()
+        updateButtons()
+    }
+    @IBAction func dealThreeMoreCardsIsPressed() {
+        setGame.dealCards(.three)
+        updateButtons()
     }
     
-    private var buttonsAndCardIndices = [Int : Int]() {
-        didSet {
-            print(buttonsAndCardIndices)
-        }
-    }
-    
+    private var buttonsAndCardIndices = [Int : Int]()
 }
 
 extension SetController {
@@ -42,7 +42,7 @@ extension SetController {
         let buttonIndicesAndNewCardsIndices = zip(buttonIndices, newCardsIndices)
         buttonsAndCardIndices.merge(buttonIndicesAndNewCardsIndices, uniquingKeysWith: { $1 })
     }
-    private func updateSetBoard() {
+    private func updateButtons() {
         for buttonIndex in buttonsAndCardIndices.keys {
             let cardIndex = buttonsAndCardIndices[buttonIndex]!
             let card = setGame[cardIndex]
@@ -50,21 +50,64 @@ extension SetController {
             updateButton(button, withCard: card)
         }
     }
+    
     private func updateButton(_ button: UIButton, withCard card: Card) {
+        let attrString = makeAttributedString(forCard: card)
+        button.setAttributedTitle(attrString, for: .normal)
+    }
+    private func makeAttributedString(forCard card: Card) -> NSMutableAttributedString {
+        let shapeString = produceShapeString(numberOfShapes: card.numberOfShapes, shapeType: card.shape)
+        let attrString = NSMutableAttributedString(string: shapeString)
+        let range = NSRange(location: 0, length: shapeString.count)
+        let shadingAttribute = produceShadingAtribute(forShading: card.shading)
+        let colorAttribute = produceColorAttribute(forCardColor: card.color, andShading: card.shading)
+        attrString.addAttributes(shadingAttribute, range: range)
+        attrString.addAttributes(colorAttribute, range: range)
+        return attrString
+    }
+    private func produceShapeString(numberOfShapes: Card.NumberOfShapes, shapeType: Card.Shape) -> String {
         let singleCardShape: String
-        switch card.shape {
+        switch shapeType {
         case .diamond: singleCardShape = "▲"
         case .oval: singleCardShape = "●"
         case .squiggle: singleCardShape = "■"
         }
-        let numberOfShapes: Int
-        switch card.numberOfShapes {
-        case .one: numberOfShapes = 1
-        case .two: numberOfShapes = 2
-        case .three: numberOfShapes = 3
+        let shapesCount: Int
+        switch numberOfShapes {
+        case .one: shapesCount = 1
+        case .two: shapesCount = 2
+        case .three: shapesCount = 3
         }
-        let resultingShapeString = String(String(repeating: singleCardShape + "\n", count: numberOfShapes).dropLast(1))
-        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
-        button.setTitle(resultingShapeString, for: .normal)
+        let resultingShapeString = String(String(repeating: singleCardShape + "\n", count: shapesCount).dropLast(1))
+        return resultingShapeString
+    }
+    private func produceShadingAtribute(forShading shading: Card.Shading) -> [NSAttributedString.Key : Any] {
+        let attribute: [NSAttributedString.Key : Any]
+        switch shading {
+        case .open: attribute = [.strokeWidth : 6]
+        case .solid: attribute = [.strokeWidth : -0.5]
+        case .striped: attribute = [.strokeWidth : -0.5]
+        }
+        return attribute
+    }
+    private func produceColorAttribute(forCardColor color: Card.Color, andShading shading: Card.Shading) -> [NSAttributedString.Key : Any] {
+        var alpha: CGFloat = 2.0
+        if shading == .striped { alpha = 0.2 }
+        let attribute: [NSAttributedString.Key : Any]
+        switch color {
+        case .green: attribute = [.foregroundColor :  #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1).withAlphaComponent(alpha)]
+        case .red: attribute = [.foregroundColor :  #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(alpha)]
+        case .purple: attribute = [.foregroundColor :  #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1).withAlphaComponent(alpha)]
+        }
+        return attribute
+    }
+    private func setupButtons() {
+        buttons.forEach {
+            $0.titleLabel?.numberOfLines = 0
+            $0.titleLabel?.adjustsFontSizeToFitWidth = true
+            $0.titleLabel?.minimumScaleFactor = 0.001
+            $0.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
+            
+        }
     }
 }
