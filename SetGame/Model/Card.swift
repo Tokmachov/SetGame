@@ -13,6 +13,7 @@ struct Card {
     let shape: Shape
     let shading: Shading
     let color: Color
+    var isSelected = false
     enum NumberOfShapes: CaseIterable {
         case one, two, three
     }

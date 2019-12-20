@@ -18,20 +18,30 @@ class SetController: UIViewController {
     }
     lazy private var randomFreeButtonIndices = buttons.indices.map { $0 }.shuffled()
     
-    @IBOutlet private var buttons: [UIButton]!
+    @IBOutlet private var buttons: [CardButton]!
+    private var numberOfSelectedButtons: Int {
+        return buttons.filter { $0.isPressed }.count
+    }
+    private var buttonsAndCardIndices = [Int : Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtons()
         setGame.dealCards(.twelve)
         updateButtons()
     }
+    
     @IBAction func dealThreeMoreCardsIsPressed() {
         setGame.dealCards(.three)
         updateButtons()
     }
-    
-    private var buttonsAndCardIndices = [Int : Int]()
+    @IBAction func cardButtonIsPressed(_ sender: CardButton) {
+        guard sender.showsCad else { return }
+        if !sender.isPressed {
+            sender.isPressed = true
+        } else if sender.isPressed && numberOfSelectedButtons < 3 {
+            sender.isPressed = false
+        }
+    }
 }
 
 extension SetController {
@@ -48,6 +58,7 @@ extension SetController {
             let card = setGame[cardIndex]
             let button = buttons[buttonIndex]
             updateButton(button, withCard: card)
+            button.showsCad = true
         }
     }
     
@@ -100,14 +111,5 @@ extension SetController {
         case .purple: attribute = [.foregroundColor :  #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1).withAlphaComponent(alpha)]
         }
         return attribute
-    }
-    private func setupButtons() {
-        buttons.forEach {
-            $0.titleLabel?.numberOfLines = 0
-            $0.titleLabel?.adjustsFontSizeToFitWidth = true
-            $0.titleLabel?.minimumScaleFactor = 0.001
-            $0.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
-            
-        }
     }
 }

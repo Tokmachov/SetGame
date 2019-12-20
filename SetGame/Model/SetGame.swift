@@ -14,15 +14,27 @@ struct SetGame {
     init() {
         self.cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
     }
+    
     var dealtCards = [Card]()
+    
     subscript(cardIndex: Int) -> Card {
         return dealtCards[cardIndex]
     }
+    
     mutating func dealCards(_ numberOfCards: NumberOfCards) {
         assert(numberOfCards.rawValue <= cards.count, "Number of Cards: \(cards.count) is less then number of cards to deal: \(numberOfCards.rawValue)")
         let cardsToDeal = Array(cards.prefix(numberOfCards.rawValue))
         cards.removeFirst(numberOfCards.rawValue)
         dealtCards.append(contentsOf: cardsToDeal)
+    }
+    
+    func choseCard(atIndex index: Int) {
+        assert(dealtCards.indices.contains(index), "Index passed to SetGame.choseCard(atIndex:) is out of SetGame.dealtCards indeces range.")
+        if dealtCards[index].isSelected {
+            dealtCards[index].isSelected = false
+        } else {
+            dealtCards[index].isSelected = true
+        }
     }
 }
 extension SetGame {
