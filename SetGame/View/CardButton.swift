@@ -18,9 +18,9 @@ class CardButton: UIButton {
             }
         }
     }
-    var showsCad = false {
+    var showsCard = false {
         didSet {
-            if showsCad {
+            if showsCard {
                 makeVisible()
             } else {
                 makeInvisible()
@@ -56,6 +56,6 @@ class CardButton: UIButton {
     private func setupButton() {
         self.titleLabel?.numberOfLines = 0
         self.layer.cornerRadius = 8.0
-        showsCad = false
+        showsCard = false
     }
 }

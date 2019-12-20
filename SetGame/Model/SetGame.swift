@@ -14,12 +14,16 @@ struct SetGame {
     init() {
         self.cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
     }
-    
+    private var allowedToDeslectCard: Bool {
+        return dealtCards.filter { $0.isSelected }.count < 3
+    }
     var dealtCards = [Card]()
     
     subscript(cardIndex: Int) -> Card {
         return dealtCards[cardIndex]
     }
+    
+    
     
     mutating func dealCards(_ numberOfCards: NumberOfCards) {
         assert(numberOfCards.rawValue <= cards.count, "Number of Cards: \(cards.count) is less then number of cards to deal: \(numberOfCards.rawValue)")
@@ -28,10 +32,12 @@ struct SetGame {
         dealtCards.append(contentsOf: cardsToDeal)
     }
     
-    func choseCard(atIndex index: Int) {
+    mutating func choseCard(atIndex index: Int) {
         assert(dealtCards.indices.contains(index), "Index passed to SetGame.choseCard(atIndex:) is out of SetGame.dealtCards indeces range.")
         if dealtCards[index].isSelected {
-            dealtCards[index].isSelected = false
+            if allowedToDeslectCard {
+                dealtCards[index].isSelected = false
+            }
         } else {
             dealtCards[index].isSelected = true
         }

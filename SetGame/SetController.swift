@@ -19,9 +19,7 @@ class SetController: UIViewController {
     lazy private var randomFreeButtonIndices = buttons.indices.map { $0 }.shuffled()
     
     @IBOutlet private var buttons: [CardButton]!
-    private var numberOfSelectedButtons: Int {
-        return buttons.filter { $0.isPressed }.count
-    }
+    
     private var buttonsAndCardIndices = [Int : Int]()
     
     override func viewDidLoad() {
@@ -35,11 +33,10 @@ class SetController: UIViewController {
         updateButtons()
     }
     @IBAction func cardButtonIsPressed(_ sender: CardButton) {
-        guard sender.showsCad else { return }
-        if !sender.isPressed {
-            sender.isPressed = true
-        } else if sender.isPressed && numberOfSelectedButtons < 3 {
-            sender.isPressed = false
+        if let buttonIndex = buttons.firstIndex(of: sender),
+            let cardIndex = buttonsAndCardIndices[buttonIndex] {
+            setGame.choseCard(atIndex: cardIndex)
+            updateButtons()
         }
     }
 }
@@ -53,18 +50,23 @@ extension SetController {
         buttonsAndCardIndices.merge(buttonIndicesAndNewCardsIndices, uniquingKeysWith: { $1 })
     }
     private func updateButtons() {
-        for buttonIndex in buttonsAndCardIndices.keys {
-            let cardIndex = buttonsAndCardIndices[buttonIndex]!
-            let card = setGame[cardIndex]
-            let button = buttons[buttonIndex]
-            updateButton(button, withCard: card)
-            button.showsCad = true
+        for buttonIndex in 0..<buttons.count {
+            if let cardIndex = buttonsAndCardIndices[buttonIndex] {
+                let card = setGame[cardIndex]
+                let button = buttons[buttonIndex]
+                updateButton(button, withCard: card)
+            } else {
+                buttons[buttonIndex].showsCard = false
+            }
         }
+        
     }
     
-    private func updateButton(_ button: UIButton, withCard card: Card) {
+    private func updateButton(_ button: CardButton, withCard card: Card) {
         let attrString = makeAttributedString(forCard: card)
         button.setAttributedTitle(attrString, for: .normal)
+        button.isPressed = card.isSelected
+        button.showsCard = true
     }
     private func makeAttributedString(forCard card: Card) -> NSMutableAttributedString {
         let shapeString = produceShapeString(numberOfShapes: card.numberOfShapes, shapeType: card.shape)
