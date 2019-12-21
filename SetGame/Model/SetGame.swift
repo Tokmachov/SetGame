@@ -12,11 +12,13 @@ import Foundation
 struct SetGame {
     
     private var cards: [Card]
-    
-    init() {
+    private var maxCardsOnBoard: Int
+    init(maxCardsOnBoard: Int) {
+        self.maxCardsOnBoard = maxCardsOnBoard
         self.cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
     }
     init(test: Bool) {
+        self.maxCardsOnBoard = 24
         let card = Card(numberOfShapes: .one, shape: .diamond, shading: .solid, color: .green)
         self.cards = [card,card,card,card,card,card,card,card,card,card,card,card]
     }
@@ -35,7 +37,18 @@ struct SetGame {
         }
     }
     
-    mutating func dealCards(_ numberOfCards: NumberOfCards) {
+    var isAbleToDealCards: Bool {
+        if (matchState == .inProcessOfMatching
+            && cards.count >= NumberOfCardsDealt.duringTheGame.rawValue
+            && dealtCards.count <= (maxCardsOnBoard - NumberOfCardsDealt.duringTheGame.rawValue))
+            || cards.count >= NumberOfCardsDealt.duringTheGame.rawValue && (matchState == .matched) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    mutating func dealCards(_ numberOfCards: NumberOfCardsDealt) {
         if matchState == .matched {
             substituteMatchedCardsForNewOnesOrDeactivateThem()
         } else {
@@ -62,8 +75,8 @@ struct SetGame {
     }
 }
 extension SetGame {
-    enum NumberOfCards: Int {
-        case twelve = 12, three = 3
+    enum NumberOfCardsDealt: Int {
+        case atTheBegining = 12, duringTheGame = 3
     }
 }
 extension SetGame {

@@ -10,7 +10,7 @@ import UIKit
 
 class SetController: UIViewController {
     
-    private var setGame = SetGame() {
+    private var setGame = SetGame(maxCardsOnBoard: 24) {
         didSet {
             let numberOfNewCards = setGame.dealtCards.count - oldValue.dealtCards.count
                 addNewIndicesToButtonsAndCardsIndices(for: numberOfNewCards)
@@ -19,18 +19,20 @@ class SetController: UIViewController {
     lazy private var randomFreeButtonIndices = buttons.indices.map { $0 }.shuffled()
     
     @IBOutlet private var buttons: [CardButton]!
+    @IBOutlet weak var dealButton: UIButton!
     
     private var buttonsAndCardIndices = [Int : Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setGame.dealCards(.twelve)
+        setGame.dealCards(.atTheBegining)
         updateButtons()
     }
     
     @IBAction func dealThreeMoreCardsIsPressed() {
-        setGame.dealCards(.three)
+        setGame.dealCards(.duringTheGame)
         updateButtons()
+        dealButton.isEnabled = setGame.isAbleToDealCards
     }
     @IBAction func cardButtonIsPressed(_ sender: CardButton) {
         if let buttonIndex = buttons.firstIndex(of: sender),
@@ -38,6 +40,7 @@ class SetController: UIViewController {
             setGame.choseCard(atIndex: cardIndex)
             updateButtons()
         }
+        dealButton.isEnabled = setGame.isAbleToDealCards
     }
 }
 
