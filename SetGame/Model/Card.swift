@@ -9,22 +9,14 @@
 import Foundation
 
 struct Card {
-    let numberOfShapes: NumberOfShapes
-    let shape: Shape
-    let shading: Shading
-    let color: Color
+    let traitOne: TraitState
+    let traitTwo: TraitState
+    let traitThree: TraitState
+    let traitFour: TraitState
+    
     var isSelected = false
     var isActive = true
-    enum NumberOfShapes: CaseIterable {
-        case one, two, three
-    }
-    enum Shape: CaseIterable {
-        case diamond, squiggle, oval
-    }
-    enum Shading: CaseIterable {
-        case solid, striped, open
-    }
-    enum Color: CaseIterable {
-        case red, green, purple
+    enum TraitState:  Int, CaseIterable {
+        case firstState = 1, secondState, thirdState
     }
 }

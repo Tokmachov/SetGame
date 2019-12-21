@@ -19,7 +19,7 @@ struct SetGame {
     }
     init(test: Bool) {
         self.maxCardsOnBoard = 24
-        let card = Card(numberOfShapes: .one, shape: .diamond, shading: .solid, color: .green)
+        let card = Card(traitOne: .firstState, traitTwo: .secondState, traitThree: .thirdState, traitFour: .thirdState)
         self.cards = [card,card,card,card,card,card,card,card,card,card,card,card]
     }
     
@@ -90,22 +90,22 @@ extension SetGame {
 }
 extension SetGame {
     private struct CardsFactory {
-        private static var randomColors = Card.Color.allCases
-        private static var randomShadings = Card.Shading.allCases
-        private static var randomNumberOfShapes = Card.NumberOfShapes.allCases
-        private static var randomShapes = Card.Shape.allCases
+        private static var firstTraitStates = Card.TraitState.allCases
+        private static var secondTraitStates = Card.TraitState.allCases
+        private static var thirdTraitStates = Card.TraitState.allCases
+        private static var forthTraitStates = Card.TraitState.allCases
         
         static func makeAllPossibleCardsInRandomOrder() ->[Card] {
             var cards = [Card]()
-            for color in randomColors {
-                for shading in randomShadings {
-                    for numberOfShades in randomNumberOfShapes {
-                        for shape in randomShapes {
+            for firstTraitState in firstTraitStates {
+                for secondTraitState in secondTraitStates {
+                    for thirdTraitState in thirdTraitStates {
+                        for forthTraitState in forthTraitStates {
                             let card = Card(
-                                numberOfShapes: numberOfShades,
-                                shape: shape,
-                                shading: shading,
-                                color: color
+                                traitOne: firstTraitState,
+                                traitTwo: secondTraitState,
+                                traitThree: thirdTraitState,
+                                traitFour: forthTraitState
                             )
                             cards.append(card)
                         }
@@ -131,10 +131,10 @@ extension SetGame {
         return dealtCards.filter { $0.isSelected && $0.isActive }
     }
     private func areMatch(_ cards: [Card]) -> Bool {
-        let traitOneCount = Set(cards.map { $0.color }).count
-        let traitTwoCount = Set(cards.map { $0.numberOfShapes }).count
-        let traitThreeCount = Set(cards.map { $0.shading }).count
-        let traitFourCount = Set(cards.map { $0.shape }).count
+        let traitOneCount = Set(cards.map { $0.traitFour }).count
+        let traitTwoCount = Set(cards.map { $0.traitOne }).count
+        let traitThreeCount = Set(cards.map { $0.traitThree }).count
+        let traitFourCount = Set(cards.map { $0.traitTwo }).count
         
         let isSetByTraightOne = (traitOneCount == 3 || traitOneCount == 1)
         let isSetByTraightTwo = (traitTwoCount == 3 || traitTwoCount == 1)
