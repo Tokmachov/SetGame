@@ -73,6 +73,10 @@ struct SetGame {
             dealtCards[index].isSelected = true
         }
     }
+    mutating func startNewGame() {
+        dealtCards.removeAll()
+        cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
+    }
 }
 extension SetGame {
     enum NumberOfCardsToDeal: Int {

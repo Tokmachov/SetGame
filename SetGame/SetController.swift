@@ -12,8 +12,9 @@ class SetController: UIViewController {
     
     private var setGame = SetGame(maxCardsOnBoard: 24) {
         didSet {
-            let numberOfNewCards = setGame.dealtCards.count - oldValue.dealtCards.count
-                addNewIndicesToButtonsAndCardsIndices(for: numberOfNewCards)
+            updateButtonsAndCardsIndices()
+            updateButtons()
+            dealButton.isEnabled = setGame.isAbleToDealCards
         }
     }
     lazy private var randomFreeButtonIndices = buttons.indices.map { $0 }.shuffled()
@@ -26,31 +27,38 @@ class SetController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setGame.dealCards(.atGameBegining)
-        updateButtons()
     }
     
     @IBAction func dealThreeMoreCardsIsPressed() {
         setGame.dealCards(.duringTheGame)
-        updateButtons()
-        dealButton.isEnabled = setGame.isAbleToDealCards
     }
     @IBAction func cardButtonIsPressed(_ sender: CardButton) {
         if let buttonIndex = buttons.firstIndex(of: sender),
             let cardIndex = buttonsAndCardIndices[buttonIndex] {
             setGame.choseCard(atIndex: cardIndex)
-            updateButtons()
         }
-        dealButton.isEnabled = setGame.isAbleToDealCards
+    }
+    @IBAction func newGameButtonIsPressed() {
+        setGame.startNewGame()
+        setGame.dealCards(.atGameBegining)
     }
 }
 
 extension SetController {
-    private func addNewIndicesToButtonsAndCardsIndices(for numberOfNewCards: Int) {
-        let buttonIndices = randomFreeButtonIndices.prefix(numberOfNewCards)
-        randomFreeButtonIndices.removeFirst(numberOfNewCards)
-        let newCardsIndices = setGame.dealtCards.indices.map { $0 }.suffix(numberOfNewCards)
-        let buttonIndicesAndNewCardsIndices = zip(buttonIndices, newCardsIndices)
-        buttonsAndCardIndices.merge(buttonIndicesAndNewCardsIndices, uniquingKeysWith: { $1 })
+    private func updateButtonsAndCardsIndices() {
+        let dealtCardsCount = setGame.dealtCards.count
+        let numberOfCardsShownByButtons = buttonsAndCardIndices.count
+        if dealtCardsCount == 0 {
+            buttonsAndCardIndices = [:]
+        } else if (dealtCardsCount - numberOfCardsShownByButtons) > 0 {
+            let allButtonIndicesShuffled = Set(buttons.indices.shuffled())
+            let buttonIndecesInUse = Set(buttonsAndCardIndices.keys)
+            let freeButtonIndices = allButtonIndicesShuffled.subtracting(buttonIndecesInUse)
+            let buttonIndicesForNewCards = freeButtonIndices.suffix((dealtCardsCount - numberOfCardsShownByButtons))
+            let newCardsIndices = setGame.dealtCards.indices.map { $0 }.suffix((dealtCardsCount - numberOfCardsShownByButtons))
+            let buttonIndicesAndNewCardsIndices = zip(buttonIndicesForNewCards, newCardsIndices)
+            buttonsAndCardIndices.merge(buttonIndicesAndNewCardsIndices, uniquingKeysWith: { $1 })
+        }
     }
     private func updateButtons() {
         for buttonIndex in 0..<buttons.count {
