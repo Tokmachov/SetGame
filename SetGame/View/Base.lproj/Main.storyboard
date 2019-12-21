@@ -51,6 +51,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ece-Vy-tXI">
                                                 <rect key="frame" x="0.0" y="103.5" width="375" height="95.5"/>
@@ -80,6 +81,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="m5i-eo-sEl">
                                                 <rect key="frame" x="0.0" y="207" width="375" height="95.5"/>
@@ -109,6 +111,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="adK-40-F0v">
                                                 <rect key="frame" x="0.0" y="310.5" width="375" height="95.5"/>
@@ -138,6 +141,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Arg-iz-iQk">
                                                 <rect key="frame" x="0.0" y="414" width="375" height="95.5"/>
@@ -167,6 +171,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="x9p-R3-5sc">
                                                 <rect key="frame" x="0.0" y="517.5" width="375" height="95.5"/>
@@ -197,8 +202,10 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                         </subviews>
+                                        <variation key="heightClass=compact" axis="horizontal"/>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7Z-0u-ks1">
                                         <rect key="frame" x="0.0" y="621" width="375" height="46"/>

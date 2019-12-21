@@ -25,7 +25,7 @@ class SetController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setGame.dealCards(.atTheBegining)
+        setGame.dealCards(.atGameBegining)
         updateButtons()
     }
     

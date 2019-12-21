@@ -39,16 +39,16 @@ struct SetGame {
     
     var isAbleToDealCards: Bool {
         if (matchState == .inProcessOfMatching
-            && cards.count >= NumberOfCardsDealt.duringTheGame.rawValue
-            && dealtCards.count <= (maxCardsOnBoard - NumberOfCardsDealt.duringTheGame.rawValue))
-            || cards.count >= NumberOfCardsDealt.duringTheGame.rawValue && (matchState == .matched) {
+            && cards.count >= NumberOfCardsToDeal.duringTheGame.rawValue
+            && dealtCards.count <= (maxCardsOnBoard - NumberOfCardsToDeal.duringTheGame.rawValue))
+            || cards.count >= NumberOfCardsToDeal.duringTheGame.rawValue && (matchState == .matched) {
             return true
         } else {
             return false
         }
     }
     
-    mutating func dealCards(_ numberOfCards: NumberOfCardsDealt) {
+    mutating func dealCards(_ numberOfCards: NumberOfCardsToDeal) {
         if matchState == .matched {
             substituteMatchedCardsForNewOnesOrDeactivateThem()
         } else {
@@ -75,8 +75,8 @@ struct SetGame {
     }
 }
 extension SetGame {
-    enum NumberOfCardsDealt: Int {
-        case atTheBegining = 12, duringTheGame = 3
+    enum NumberOfCardsToDeal: Int {
+        case atGameBegining = 12, duringTheGame = 3
     }
 }
 extension SetGame {
