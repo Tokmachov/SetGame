@@ -14,6 +14,7 @@ struct Card {
     let shading: Shading
     let color: Color
     var isSelected = false
+    var isActive = true
     enum NumberOfShapes: CaseIterable {
         case one, two, three
     }

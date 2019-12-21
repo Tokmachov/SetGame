@@ -56,17 +56,26 @@ extension SetController {
                 let button = buttons[buttonIndex]
                 updateButton(button, withCard: card)
             } else {
-                buttons[buttonIndex].showsCard = false
+                buttons[buttonIndex].appearance = CardButton.Appearance.showsNoCard
             }
         }
         
     }
     
     private func updateButton(_ button: CardButton, withCard card: Card) {
+        guard card.isActive else {
+            button.appearance = .showsNoCard
+            return
+        }
         let attrString = makeAttributedString(forCard: card)
         button.setAttributedTitle(attrString, for: .normal)
         button.isPressed = card.isSelected
-        button.showsCard = true
+        if card.isSelected {
+            button.appearance = cardButtonAppearance(fromGameState: setGame.matchState)
+        } else {
+            button.appearance = .showsCardInProcessOfMatching
+        }
+        
     }
     private func makeAttributedString(forCard card: Card) -> NSMutableAttributedString {
         let shapeString = produceShapeString(numberOfShapes: card.numberOfShapes, shapeType: card.shape)
@@ -113,5 +122,12 @@ extension SetController {
         case .purple: attribute = [.foregroundColor :  #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1).withAlphaComponent(alpha)]
         }
         return attribute
+    }
+    private func cardButtonAppearance(fromGameState state: SetGame.MatchState) -> CardButton.Appearance {
+        switch state {
+        case .inProcessOfMatching: return .showsCardInProcessOfMatching
+        case .matched: return .showsMatchedCard
+        case .misMatched: return .showsMisMatchedCard
+        }
     }
 }

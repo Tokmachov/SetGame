@@ -10,35 +10,53 @@ import Foundation
 
 
 struct SetGame {
+    
     private var cards: [Card]
+    
     init() {
         self.cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
     }
-    private var allowedToDeslectCard: Bool {
-        return dealtCards.filter { $0.isSelected }.count < 3
+    init(test: Bool) {
+        let card = Card(numberOfShapes: .one, shape: .diamond, shading: .solid, color: .green)
+        self.cards = [card,card,card,card,card,card,card,card,card,card,card,card]
     }
+    // Public API
     var dealtCards = [Card]()
     
     subscript(cardIndex: Int) -> Card {
         return dealtCards[cardIndex]
     }
     
-    
-    
-    mutating func dealCards(_ numberOfCards: NumberOfCards) {
-        assert(numberOfCards.rawValue <= cards.count, "Number of Cards: \(cards.count) is less then number of cards to deal: \(numberOfCards.rawValue)")
-        let cardsToDeal = Array(cards.prefix(numberOfCards.rawValue))
-        cards.removeFirst(numberOfCards.rawValue)
-        dealtCards.append(contentsOf: cardsToDeal)
+    var matchState: MatchState {
+        switch  numberOfSelectedCards {
+        case 0...2: return .inProcessOfMatching
+        case 3: return areMatch(selectedCards) ? .matched : .misMatched
+        default: return .inProcessOfMatching
+        }
     }
     
+    mutating func dealCards(_ numberOfCards: NumberOfCards) {
+        if matchState == .matched {
+            substituteMatchedCardsForNewOnesOrDeactivateThem()
+        } else {
+            let cardsToDeal = Array(cards.suffix(numberOfCards.rawValue))
+            cards.removeLast(numberOfCards.rawValue)
+            dealtCards.append(contentsOf: cardsToDeal)
+        }
+    }
+
     mutating func choseCard(atIndex index: Int) {
         assert(dealtCards.indices.contains(index), "Index passed to SetGame.choseCard(atIndex:) is out of SetGame.dealtCards indeces range.")
-        if dealtCards[index].isSelected {
-            if allowedToDeslectCard {
-                dealtCards[index].isSelected = false
-            }
-        } else {
+        let isSelected = dealtCards[index].isSelected
+        switch (matchState, isSelected) {
+        case (_, _) where dealtCards[index].isActive == false: break
+        case (.inProcessOfMatching, false): dealtCards[index].isSelected = true
+        case (.inProcessOfMatching, true): dealtCards[index].isSelected = false
+        case (.misMatched, _):
+            deselectAllCards()
+            dealtCards[index].isSelected = true
+        case (.matched, _):
+            substituteMatchedCardsForNewOnesOrDeactivateThem()
             dealtCards[index].isSelected = true
         }
     }
@@ -73,6 +91,47 @@ extension SetGame {
                 }
             }
             return cards.shuffled()
+        }
+    }
+}
+extension SetGame {
+    enum MatchState {
+        case matched, misMatched, inProcessOfMatching
+    }
+}
+
+extension SetGame {
+ 
+    private var numberOfSelectedCards: Int {
+        return dealtCards.filter { $0.isSelected && $0.isActive }.count
+    }
+    private var selectedCards: [Card] {
+        return dealtCards.filter { $0.isSelected && $0.isActive }
+    }
+    private func areMatch(_ cards: [Card]) -> Bool {
+        let traitOneCount = Set(cards.map { $0.color }).count
+        let traitTwoCount = Set(cards.map { $0.numberOfShapes }).count
+        let traitThreeCount = Set(cards.map { $0.shading }).count
+        let traitFourCount = Set(cards.map { $0.shape }).count
+        
+        let isSetByTraightOne = (traitOneCount == 3 || traitOneCount == 1)
+        let isSetByTraightTwo = (traitTwoCount == 3 || traitTwoCount == 1)
+        let isSetByTraightThree = (traitThreeCount == 3 || traitThreeCount == 1)
+        let isSetByTraightFour = (traitFourCount == 3 || traitFourCount == 1)
+        return isSetByTraightOne && isSetByTraightTwo && isSetByTraightThree && isSetByTraightFour
+    }
+    private mutating func deselectAllCards() {
+        for index in dealtCards.indices {
+            dealtCards[index].isSelected = false
+        }
+    }
+    private mutating func substituteMatchedCardsForNewOnesOrDeactivateThem() {
+        for (i, card) in dealtCards.enumerated() where card.isSelected {
+            if let newCard = cards.popLast() {
+                dealtCards[i] = newCard
+            } else {
+                dealtCards[i].isActive = false
+            }
         }
     }
 }
