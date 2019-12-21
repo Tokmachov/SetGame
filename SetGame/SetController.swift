@@ -15,14 +15,15 @@ class SetController: UIViewController {
             updateButtonsAndCardsIndices()
             updateButtons()
             dealButton.isEnabled = setGame.isAbleToDealCards
+            updateScoreLabel()
         }
     }
-    lazy private var randomFreeButtonIndices = buttons.indices.map { $0 }.shuffled()
     
     @IBOutlet private var buttons: [CardButton]!
     @IBOutlet weak var dealButton: UIButton!
+    @IBOutlet weak var scoreLabel: UILabel!
     
-    private var buttonsAndCardIndices = [Int : Int]()
+    private var buttonsAndCardsIndices = [Int : Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +35,7 @@ class SetController: UIViewController {
     }
     @IBAction func cardButtonIsPressed(_ sender: CardButton) {
         if let buttonIndex = buttons.firstIndex(of: sender),
-            let cardIndex = buttonsAndCardIndices[buttonIndex] {
+            let cardIndex = buttonsAndCardsIndices[buttonIndex] {
             setGame.choseCard(atIndex: cardIndex)
         }
     }
@@ -47,22 +48,23 @@ class SetController: UIViewController {
 extension SetController {
     private func updateButtonsAndCardsIndices() {
         let dealtCardsCount = setGame.dealtCards.count
-        let numberOfCardsShownByButtons = buttonsAndCardIndices.count
+        let numberOfCardsShownByButtons = buttonsAndCardsIndices.count
+        let numberOfAddedCards = dealtCardsCount - numberOfCardsShownByButtons
         if dealtCardsCount == 0 {
-            buttonsAndCardIndices = [:]
-        } else if (dealtCardsCount - numberOfCardsShownByButtons) > 0 {
+            buttonsAndCardsIndices = [:]
+        } else if numberOfAddedCards > 0 {
             let allButtonIndicesShuffled = Set(buttons.indices.shuffled())
-            let buttonIndecesInUse = Set(buttonsAndCardIndices.keys)
+            let buttonIndecesInUse = Set(buttonsAndCardsIndices.keys)
             let freeButtonIndices = allButtonIndicesShuffled.subtracting(buttonIndecesInUse)
-            let buttonIndicesForNewCards = freeButtonIndices.suffix((dealtCardsCount - numberOfCardsShownByButtons))
-            let newCardsIndices = setGame.dealtCards.indices.map { $0 }.suffix((dealtCardsCount - numberOfCardsShownByButtons))
+            let buttonIndicesForNewCards = freeButtonIndices.suffix(numberOfAddedCards)
+            let newCardsIndices = setGame.dealtCards.indices.map { $0 }.suffix(numberOfAddedCards)
             let buttonIndicesAndNewCardsIndices = zip(buttonIndicesForNewCards, newCardsIndices)
-            buttonsAndCardIndices.merge(buttonIndicesAndNewCardsIndices, uniquingKeysWith: { $1 })
+            buttonsAndCardsIndices.merge(buttonIndicesAndNewCardsIndices, uniquingKeysWith: { $1 })
         }
     }
     private func updateButtons() {
         for buttonIndex in 0..<buttons.count {
-            if let cardIndex = buttonsAndCardIndices[buttonIndex] {
+            if let cardIndex = buttonsAndCardsIndices[buttonIndex] {
                 let card = setGame[cardIndex]
                 let button = buttons[buttonIndex]
                 updateButton(button, withCard: card)
@@ -94,8 +96,10 @@ extension SetController {
         let range = NSRange(location: 0, length: shapeString.count)
         let shadingAttribute = produceShadingAtribute(forShading: card.shading)
         let colorAttribute = produceColorAttribute(forCardColor: card.color, andShading: card.shading)
+        let fontAttribute: [NSAttributedString.Key : Any] = [.font : UIFont.systemFont(ofSize: 18)]
         attrString.addAttributes(shadingAttribute, range: range)
         attrString.addAttributes(colorAttribute, range: range)
+        attrString.addAttributes(fontAttribute, range: range)
         return attrString
     }
     private func produceShapeString(numberOfShapes: Card.NumberOfShapes, shapeType: Card.Shape) -> String {
@@ -125,7 +129,7 @@ extension SetController {
     }
     private func produceColorAttribute(forCardColor color: Card.Color, andShading shading: Card.Shading) -> [NSAttributedString.Key : Any] {
         var alpha: CGFloat = 2.0
-        if shading == .striped { alpha = 0.2 }
+        if shading == .striped { alpha = 0.3 }
         let attribute: [NSAttributedString.Key : Any]
         switch color {
         case .green: attribute = [.foregroundColor :  #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1).withAlphaComponent(alpha)]
@@ -140,5 +144,8 @@ extension SetController {
         case .matched: return .showsMatchedCard
         case .misMatched: return .showsMisMatchedCard
         }
+    }
+    private func updateScoreLabel() {
+        scoreLabel.text = "Score: \(setGame.score)"
     }
 }

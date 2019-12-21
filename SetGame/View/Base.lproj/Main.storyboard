@@ -19,33 +19,44 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="utb-pG-N1P">
                                 <rect key="frame" x="2" y="0.0" width="371" height="667"/>
                                 <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="F2t-uk-9st">
+                                        <rect key="frame" x="0.0" y="0.0" width="371" height="33.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VJK-PY-g6S">
+                                                <rect key="frame" x="152.5" y="0.0" width="66.5" height="33.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ElC-m0-rff">
-                                        <rect key="frame" x="0.0" y="0.0" width="371" height="559"/>
+                                        <rect key="frame" x="0.0" y="41.5" width="371" height="517.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="QkT-Ya-bj7">
-                                                <rect key="frame" x="0.0" y="0.0" width="371" height="86.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="371" height="79.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BBA-cF-cXC" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="79.5"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jV6-L4-jg9"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rQz-Xw-8dj" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="r09-MO-BFt"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ck8-3J-pEK" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LUb-Ao-bih"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ig-Fp-866" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HAH-F2-7bp"/>
                                                         </connections>
@@ -54,28 +65,28 @@
                                                 <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ece-Vy-tXI">
-                                                <rect key="frame" x="0.0" y="94.5" width="371" height="86.5"/>
+                                                <rect key="frame" x="0.0" y="87.5" width="371" height="79.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Val-Pt-bP1" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Wb-Xt-LDJ"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YZQ-F0-UiV" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PwL-43-luK"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yAB-gz-ax0" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="csa-Ur-3uR"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b4U-Tp-bbc" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="j6N-04-Mmu"/>
                                                         </connections>
@@ -84,28 +95,28 @@
                                                 <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="m5i-eo-sEl">
-                                                <rect key="frame" x="0.0" y="189" width="371" height="86.5"/>
+                                                <rect key="frame" x="0.0" y="175" width="371" height="80"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mGn-CL-rWF" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="80"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hxg-jj-VcS"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eND-Wa-G5b" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="80"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="88c-52-QkH"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ewg-gU-mvU" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="80"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ig1-91-H9k"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxI-Pe-RHq" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="80"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="50J-IA-uky"/>
                                                         </connections>
@@ -114,28 +125,28 @@
                                                 <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="adK-40-F0v">
-                                                <rect key="frame" x="0.0" y="283.5" width="371" height="86.5"/>
+                                                <rect key="frame" x="0.0" y="263" width="371" height="79.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Ns-9g-xBZ" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wY4-5T-9lL"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HIK-Gg-mdk" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VGb-rf-Iva"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IzK-ac-wgl" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="857-0h-RLd"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gnn-KC-SG7" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="s5c-qm-ntr"/>
                                                         </connections>
@@ -144,28 +155,28 @@
                                                 <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Arg-iz-iQk">
-                                                <rect key="frame" x="0.0" y="378" width="371" height="86.5"/>
+                                                <rect key="frame" x="0.0" y="350.5" width="371" height="79.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dCV-Ys-DwM" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="V3x-m7-WQu"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T9K-BR-l65" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gKC-6l-fho"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vxm-bo-zsQ" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dUb-Xh-rdO"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="86e-hW-9Wo" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cCL-OL-uxT"/>
                                                         </connections>
@@ -174,28 +185,28 @@
                                                 <variation key="heightClass=compact" axis="vertical"/>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="x9p-R3-5sc">
-                                                <rect key="frame" x="0.0" y="472.5" width="371" height="86.5"/>
+                                                <rect key="frame" x="0.0" y="438" width="371" height="79.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gl0-zj-1B9" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fr9-YH-mV0"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5mo-KK-q4d" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="95" y="0.0" width="86.5" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="I7D-0F-JPa"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vjt-2C-Lnf" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="86.5"/>
+                                                        <rect key="frame" x="189.5" y="0.0" width="87" height="79.5"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Rdp-mj-2Za"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hr0-OK-Jre" customClass="CardButton" customModule="SetGame" customModuleProvider="target">
-                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="86.5"/>
+                                                        <rect key="frame" x="284.5" y="0.0" width="86.5" height="79.5"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <connections>
                                                             <action selector="cardButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xMT-J9-lat"/>
@@ -207,22 +218,27 @@
                                         </subviews>
                                         <variation key="heightClass=compact" axis="horizontal"/>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7Z-0u-ks1">
-                                        <rect key="frame" x="0.0" y="567" width="371" height="46"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                        <state key="normal" title="Deal 3 more cards"/>
-                                        <connections>
-                                            <action selector="dealThreeMoreCardsIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="2FP-N1-d4G"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="odh-ht-ov8">
-                                        <rect key="frame" x="0.0" y="621" width="371" height="46"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                        <state key="normal" title="New game"/>
-                                        <connections>
-                                            <action selector="newGameButtonIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="9OE-d8-yK8"/>
-                                        </connections>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="zgm-FX-oQo">
+                                        <rect key="frame" x="0.0" y="567" width="371" height="100"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7Z-0u-ks1">
+                                                <rect key="frame" x="76.5" y="0.0" width="218" height="46"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                                <state key="normal" title="Deal 3 more cards"/>
+                                                <connections>
+                                                    <action selector="dealThreeMoreCardsIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="2FP-N1-d4G"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="odh-ht-ov8">
+                                                <rect key="frame" x="121" y="54" width="129" height="46"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                                <state key="normal" title="New game"/>
+                                                <connections>
+                                                    <action selector="newGameButtonIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="9OE-d8-yK8"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -237,6 +253,7 @@
                     </view>
                     <connections>
                         <outlet property="dealButton" destination="g7Z-0u-ks1" id="Q5F-Uq-iDb"/>
+                        <outlet property="scoreLabel" destination="VJK-PY-g6S" id="GtP-uh-JRW"/>
                         <outletCollection property="buttons" destination="BBA-cF-cXC" collectionClass="NSMutableArray" id="QZr-U7-hdn"/>
                         <outletCollection property="buttons" destination="rQz-Xw-8dj" collectionClass="NSMutableArray" id="mQ3-sw-Mqj"/>
                         <outletCollection property="buttons" destination="6ig-Fp-866" collectionClass="NSMutableArray" id="w5K-OI-icU"/>

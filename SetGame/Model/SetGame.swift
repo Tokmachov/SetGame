@@ -22,6 +22,7 @@ struct SetGame {
         let card = Card(numberOfShapes: .one, shape: .diamond, shading: .solid, color: .green)
         self.cards = [card,card,card,card,card,card,card,card,card,card,card,card]
     }
+    
     // Public API
     var dealtCards = [Card]()
     
@@ -48,6 +49,8 @@ struct SetGame {
         }
     }
     
+    var score: Int = 0
+    
     mutating func dealCards(_ numberOfCards: NumberOfCardsToDeal) {
         if matchState == .matched {
             substituteMatchedCardsForNewOnesOrDeactivateThem()
@@ -72,10 +75,12 @@ struct SetGame {
             substituteMatchedCardsForNewOnesOrDeactivateThem()
             dealtCards[index].isSelected = true
         }
+        score = newScore()
     }
     mutating func startNewGame() {
         dealtCards.removeAll()
         cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
+        score = 0
     }
 }
 extension SetGame {
@@ -149,6 +154,13 @@ extension SetGame {
             } else {
                 dealtCards[i].isActive = false
             }
+        }
+    }
+    private func newScore() -> Int {
+        switch matchState {
+        case .matched: return score + 1
+        case .misMatched: return score - 1
+        default: return score
         }
     }
 }
