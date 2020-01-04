@@ -31,8 +31,7 @@ struct SetGame {
     }
     
     var matchState: MatchState {
-        switch  numberOfSelectedCards {
-        case 0...2: return .inProcessOfMatching
+        switch  selectedCards.count {
         case 3: return areMatch(selectedCards) ? .matched : .misMatched
         default: return .inProcessOfMatching
         }
@@ -64,14 +63,15 @@ struct SetGame {
     mutating func choseCard(atIndex index: Int) {
         assert(dealtCards.indices.contains(index), "Index passed to SetGame.choseCard(atIndex:) is out of SetGame.dealtCards indeces range.")
         let isSelected = dealtCards[index].isSelected
-        switch (matchState, isSelected) {
-        case (_, _) where dealtCards[index].isActive == false: break
-        case (.inProcessOfMatching, false): dealtCards[index].isSelected = true
-        case (.inProcessOfMatching, true): dealtCards[index].isSelected = false
-        case (.misMatched, _):
+        let isActive = dealtCards[index].isActive
+        switch (matchState, isSelected, isActive) {
+        case (_, _, false): break
+        case (.inProcessOfMatching, false,_): dealtCards[index].isSelected = true
+        case (.inProcessOfMatching, true,_): dealtCards[index].isSelected = false
+        case (.misMatched, _,_):
             deselectAllCards()
             dealtCards[index].isSelected = true
-        case (.matched, _):
+        case (.matched, _,_):
             substituteMatchedCardsForNewOnesOrDeactivateThem()
             dealtCards[index].isSelected = true
         }
@@ -124,9 +124,6 @@ extension SetGame {
 
 extension SetGame {
  
-    private var numberOfSelectedCards: Int {
-        return dealtCards.filter { $0.isSelected && $0.isActive }.count
-    }
     private var selectedCards: [Card] {
         return dealtCards.filter { $0.isSelected && $0.isActive }
     }

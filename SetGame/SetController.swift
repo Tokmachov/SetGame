@@ -13,13 +13,17 @@ class SetController: UIViewController {
     private var setGame = SetGame(maxCardsOnBoard: 24) {
         didSet {
             updateButtonsAndCardsIndices()
-            updateButtons()
+            updateButtons(with: updateCardsAvailability, updateCardSelection, updateResultOfCardSelection)
             dealButton.isEnabled = setGame.isAbleToDealCards
             updateScoreLabel()
         }
     }
     
-    @IBOutlet private var buttons: [CardButton]!
+    @IBOutlet private var buttons: [CardButton]! {
+        didSet {
+            buttons.forEach { $0.showsTouchWhenHighlighted = true }
+        }
+    }
     @IBOutlet weak var dealButton: UIButton!
     @IBOutlet weak var scoreLabel: UILabel!
     
@@ -28,6 +32,7 @@ class SetController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setGame.dealCards(.atGameBegining)
+        
     }
     
     @IBAction func dealThreeMoreCardsIsPressed() {
@@ -62,34 +67,47 @@ extension SetController {
             buttonsAndCardsIndices.merge(buttonIndicesAndNewCardsIndices, uniquingKeysWith: { $1 })
         }
     }
-    private func updateButtons() {
-        for buttonIndex in 0..<buttons.count {
-            if let cardIndex = buttonsAndCardsIndices[buttonIndex] {
-                let card = setGame[cardIndex]
-                let button = buttons[buttonIndex]
-                updateButton(button, withCard: card)
-            } else {
-                buttons[buttonIndex].appearance = CardButton.Appearance.showsNoCard
+    private func updateButtons(with updateButton: (CardButton, CardIndex?) -> ()...) {
+        for (buttonIndex, button) in buttons.enumerated() {
+            let cardIndex = buttonsAndCardsIndices[buttonIndex]
+            for function in updateButton {
+                function(button,cardIndex)
             }
         }
-        
     }
-    
-    private func updateButton(_ button: CardButton, withCard card: Card) {
-        guard card.isActive else {
-            button.appearance = .showsNoCard
+    typealias CardIndex = Int
+    private func updateCardsAvailability(button: CardButton, cardIndex: CardIndex?) {
+        switch cardIndex {
+        case nil: button.cardDispayMode = .notDisplayed
+        case let index? where !setGame[index].isActive: button.cardDispayMode = .notDisplayed
+        case let index?:
+            let card = setGame[index]
+            let str = makeAttributedString(forCard: card)
+            button.cardDispayMode = .isDisplayed(attributeString: str)
+        }
+    }
+    private func updateCardSelection(button: CardButton, cardIndex: CardIndex?) {
+        if let cardIndex = cardIndex {
+            let card = setGame[cardIndex]
+            button.isSelected = card.isSelected
+        } else {
             return
         }
-        let attrString = makeAttributedString(forCard: card)
-        button.setAttributedTitle(attrString, for: .normal)
-        button.isPressed = card.isSelected
-        if card.isSelected {
-            button.appearance = cardButtonAppearance(fromGameState: setGame.matchState)
-        } else {
-            button.appearance = .showsCardInProcessOfMatching
-        }
-        
     }
+    private func updateResultOfCardSelection(button: CardButton, cardIndex: CardIndex?) {
+        if let cardIndex = cardIndex {
+            if setGame[cardIndex].isSelected {
+                switch setGame.matchState {
+                case .matched: button.backgroundHighlight = .green
+                case .misMatched: button.backgroundHighlight = .red
+                case .inProcessOfMatching: button.backgroundHighlight = .plain
+                }
+            } else {
+                button.backgroundHighlight = .plain
+            }
+        }
+    }
+    
     private func makeAttributedString(forCard card: Card) -> NSMutableAttributedString {
         let shapeString = produceShapeString(cardTraitOne: card.traitOne, cardTraitTwo: card.traitTwo)
         let attrString = NSMutableAttributedString(string: shapeString)
@@ -138,13 +156,7 @@ extension SetController {
         }
         return attribute
     }
-    private func cardButtonAppearance(fromGameState state: SetGame.MatchState) -> CardButton.Appearance {
-        switch state {
-        case .inProcessOfMatching: return .showsCardInProcessOfMatching
-        case .matched: return .showsMatchedCard
-        case .misMatched: return .showsMisMatchedCard
-        }
-    }
+    
     private func updateScoreLabel() {
         scoreLabel.text = "Score: \(setGame.score)"
     }
