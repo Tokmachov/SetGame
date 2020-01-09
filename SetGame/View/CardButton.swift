@@ -9,24 +9,17 @@
 import UIKit
 
 class CardButton: UIButton {
-    var cardDispayMode = CardDisplayMode.notDisplayed {
+    var cardDispayMode = CardDisplayMode.noCard {
         didSet {
             switch cardDispayMode {
-            case .notDisplayed: showNoCard()
-            case let .isDisplayed(attributeString: str): showCard(attributedString: str)
+            case .noCard: showNoCard()
+            case let .selected(attributeString: str): showSelected(str: str)
+            case let .unselected(attributeString: str): showUnselected(str: str)
+            case let .inactive(attributeString: str): showIncative(str: str)
             }
         }
     }
     
-    override var isSelected: Bool {
-        didSet {
-            if isSelected == true {
-                showAsSelected()
-            } else {
-                showAsDeselected()
-            }
-        }
-    }
     var backgroundHighlight = BackgroundColor.plain {
         didSet {
             switch backgroundHighlight {
@@ -42,19 +35,25 @@ class CardButton: UIButton {
         self.backgroundColor = UIColor.clear
         self.setAttributedTitle(nil, for: .normal)
     }
-    private func showCard(attributedString: NSMutableAttributedString) {
-        self.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
-        self.setAttributedTitle(attributedString, for: .normal)
-    }
-    
-    private func showAsSelected() {
+    private func showSelected(str: NSMutableAttributedString) {
         self.layer.borderWidth = 3.0
         self.layer.borderColor = UIColor.blue.cgColor
         self.titleLabel?.backgroundColor = UIColor.clear
+        self.setAttributedTitle(str, for: .normal)
+        self.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
     }
-    private func showAsDeselected() {
+    private func showUnselected(str: NSMutableAttributedString) {
         self.layer.borderWidth = 0.0
         self.layer.borderColor = UIColor.clear.cgColor
+        self.titleLabel?.backgroundColor = UIColor.clear
+        self.setAttributedTitle(str, for: .normal)
+        self.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
+    }
+    private func showIncative(str: NSMutableAttributedString) {
+            self.layer.borderWidth = 1.0
+            self.layer.borderColor = UIColor.orange.cgColor
+            self.titleLabel?.backgroundColor = UIColor.clear
+            self.setAttributedTitle(str, for: .normal)
     }
     
     override init(frame: CGRect) {
@@ -76,7 +75,9 @@ extension CardButton {
         case plain, red, green
     }
     enum CardDisplayMode {
-        case isDisplayed(attributeString: NSMutableAttributedString)
-        case notDisplayed
+        case unselected(attributeString: NSMutableAttributedString)
+        case selected(attributeString: NSMutableAttributedString)
+        case inactive(attributeString: NSMutableAttributedString)
+        case noCard
     }
 }

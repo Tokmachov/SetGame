@@ -14,9 +14,12 @@ struct Card {
     let traitThree: TraitState
     let traitFour: TraitState
     
-    var isSelected = false
-    var isActive = true
+    var state = CardState.unselected
+    
     enum TraitState:  Int, CaseIterable {
         case firstState = 1, secondState, thirdState
+    }
+    enum CardState {
+        case selected, unselected, incative
     }
 }

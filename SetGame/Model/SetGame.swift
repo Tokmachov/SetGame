@@ -8,86 +8,71 @@
 
 import Foundation
 
-
 struct SetGame {
     
-    private var cards: [Card]
-    private var maxCardsOnBoard: Int
-    init(maxCardsOnBoard: Int) {
-        self.maxCardsOnBoard = maxCardsOnBoard
-        self.cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
-    }
-    init(test: Bool) {
-        self.maxCardsOnBoard = 24
-        let card = Card(traitOne: .firstState, traitTwo: .secondState, traitThree: .thirdState, traitFour: .thirdState)
-        self.cards = [card,card,card,card,card,card,card,card,card,card,card,card]
-    }
-    
     // Public API
+    var delegate: SetGameDelegate!
+    
+    var deckOfUndealtCards = [Card]()
+    
     var dealtCards = [Card]()
     
     subscript(cardIndex: Int) -> Card {
         return dealtCards[cardIndex]
     }
     
-    var matchState: MatchState {
+    var result: MatchState {
         switch  selectedCards.count {
         case 3: return areMatch(selectedCards) ? .matched : .misMatched
         default: return .inProcessOfMatching
         }
     }
     
-    var isAbleToDealCards: Bool {
-        if (matchState == .inProcessOfMatching
-            && cards.count >= NumberOfCardsToDeal.duringTheGame.rawValue
-            && dealtCards.count <= (maxCardsOnBoard - NumberOfCardsToDeal.duringTheGame.rawValue))
-            || cards.count >= NumberOfCardsToDeal.duringTheGame.rawValue && (matchState == .matched) {
-            return true
-        } else {
-            return false
-        }
-    }
-    
     var score: Int = 0
     
-    mutating func dealCards(_ numberOfCards: NumberOfCardsToDeal) {
-        if matchState == .matched {
+    mutating func dealThreeCards() {
+        if result == .matched {
             substituteMatchedCardsForNewOnesOrDeactivateThem()
+            delegate.didUpdateDealtCards(self)
         } else {
-            let cardsToDeal = Array(cards.suffix(numberOfCards.rawValue))
-            cards.removeLast(numberOfCards.rawValue)
+            let cardsToDeal = deckOfUndealtCards.prefix(3)
+            deckOfUndealtCards.removeFirst(3)
             dealtCards.append(contentsOf: cardsToDeal)
+            let newCardsIndices = dealtCards.indices.suffix(3)
+            delegate.didAddNewCards(self, newCardsIndices: newCardsIndices)
         }
     }
 
     mutating func choseCard(atIndex index: Int) {
         assert(dealtCards.indices.contains(index), "Index passed to SetGame.choseCard(atIndex:) is out of SetGame.dealtCards indeces range.")
-        let isSelected = dealtCards[index].isSelected
-        let isActive = dealtCards[index].isActive
-        switch (matchState, isSelected, isActive) {
-        case (_, _, false): break
-        case (.inProcessOfMatching, false,_): dealtCards[index].isSelected = true
-        case (.inProcessOfMatching, true,_): dealtCards[index].isSelected = false
-        case (.misMatched, _,_):
+        let card = dealtCards[index]
+        switch (result, card.state) {
+        case (_, .incative): break
+        case (.inProcessOfMatching, .unselected): dealtCards[index].state = .selected
+        case (.inProcessOfMatching,.selected): dealtCards[index].state = .unselected
+        case (.misMatched, _):
             deselectAllCards()
-            dealtCards[index].isSelected = true
-        case (.matched, _,_):
+            dealtCards[index].state = .selected
+        case (.matched, _):
             substituteMatchedCardsForNewOnesOrDeactivateThem()
-            dealtCards[index].isSelected = true
+            if dealtCards[index].state == .unselected {
+                dealtCards[index].state = .selected
+            }
         }
         score = newScore()
+        delegate.didUpdateDealtCards(self)
     }
     mutating func startNewGame() {
         dealtCards.removeAll()
-        cards = CardsFactory.makeAllPossibleCardsInRandomOrder()
+        deckOfUndealtCards = CardsFactory.makeAllPossibleCardsInRandomOrder()
+        let cardToDealAtTheBeginningOfGame = deckOfUndealtCards.prefix(12)
+        dealtCards.append(contentsOf: cardToDealAtTheBeginningOfGame)
+        deckOfUndealtCards.removeFirst(12)
         score = 0
+        delegate.didStartNewGame(self)
     }
 }
-extension SetGame {
-    enum NumberOfCardsToDeal: Int {
-        case atGameBegining = 12, duringTheGame = 3
-    }
-}
+
 extension SetGame {
     private struct CardsFactory {
         private static var firstTraitStates = Card.TraitState.allCases
@@ -125,39 +110,46 @@ extension SetGame {
 extension SetGame {
  
     private var selectedCards: [Card] {
-        return dealtCards.filter { $0.isSelected && $0.isActive }
+        return dealtCards.filter { $0.state == .selected }
     }
     private func areMatch(_ cards: [Card]) -> Bool {
-        let traitOneCount = Set(cards.map { $0.traitFour }).count
-        let traitTwoCount = Set(cards.map { $0.traitOne }).count
-        let traitThreeCount = Set(cards.map { $0.traitThree }).count
-        let traitFourCount = Set(cards.map { $0.traitTwo }).count
-        
-        let isSetByTraightOne = (traitOneCount == 3 || traitOneCount == 1)
-        let isSetByTraightTwo = (traitTwoCount == 3 || traitTwoCount == 1)
-        let isSetByTraightThree = (traitThreeCount == 3 || traitThreeCount == 1)
-        let isSetByTraightFour = (traitFourCount == 3 || traitFourCount == 1)
-        return isSetByTraightOne && isSetByTraightTwo && isSetByTraightThree && isSetByTraightFour
+//        let traitOneCount = Set(cards.map { $0.traitFour }).count
+//        let traitTwoCount = Set(cards.map { $0.traitOne }).count
+//        let traitThreeCount = Set(cards.map { $0.traitThree }).count
+//        let traitFourCount = Set(cards.map { $0.traitTwo }).count
+//        
+//        let isSetByTraightOne = (traitOneCount == 3 || traitOneCount == 1)
+//        let isSetByTraightTwo = (traitTwoCount == 3 || traitTwoCount == 1)
+//        let isSetByTraightThree = (traitThreeCount == 3 || traitThreeCount == 1)
+//        let isSetByTraightFour = (traitFourCount == 3 || traitFourCount == 1)
+        return true//isSetByTraightOne && isSetByTraightTwo && isSetByTraightThree && isSetByTraightFour
     }
     private mutating func deselectAllCards() {
-        for index in dealtCards.indices {
-            dealtCards[index].isSelected = false
+        for index in dealtCards.indices where dealtCards[index].state == .selected {
+            dealtCards[index].state = .unselected
         }
     }
     private mutating func substituteMatchedCardsForNewOnesOrDeactivateThem() {
-        for (i, card) in dealtCards.enumerated() where card.isSelected {
-            if let newCard = cards.popLast() {
+        for (i, card) in dealtCards.enumerated() where card.state == .selected {
+            if let newCard = deckOfUndealtCards.popLast() {
                 dealtCards[i] = newCard
             } else {
-                dealtCards[i].isActive = false
+                dealtCards[i].state = .incative
             }
         }
     }
     private func newScore() -> Int {
-        switch matchState {
+        switch result {
         case .matched: return score + 1
         case .misMatched: return score - 1
         default: return score
         }
     }
 }
+
+protocol SetGameDelegate {
+    func didStartNewGame(_ setGame: SetGame)
+    func didAddNewCards(_ setGame: SetGame, newCardsIndices: Range<Int>)
+    func didUpdateDealtCards(_ setGame: SetGame)
+}
+

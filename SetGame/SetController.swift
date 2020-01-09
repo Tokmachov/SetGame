@@ -8,22 +8,31 @@
 
 import UIKit
 
-class SetController: UIViewController {
+class SetController: UIViewController, SetGameDelegate {
+
+    private var setGame = SetGame()
     
-    private var setGame = SetGame(maxCardsOnBoard: 24) {
-        didSet {
-            updateButtonsAndCardsIndices()
-            updateButtons(with: updateCardsAvailability, updateCardSelection, updateResultOfCardSelection)
-            dealButton.isEnabled = setGame.isAbleToDealCards
-            updateScoreLabel()
-        }
+    func didAddNewCards(_ setGame: SetGame, newCardsIndices: Range<Int>) {
+        updateButtonsAndCardIndices(withNewCardsIndices: newCardsIndices)
+        updateButtons(buttons, withCards: setGame.dealtCards)
+        dealButton.isEnabled = isDealButtonEnabled(setGame)
     }
     
-    @IBOutlet private var buttons: [CardButton]! {
-        didSet {
-            buttons.forEach { $0.showsTouchWhenHighlighted = true }
-        }
+    func didUpdateDealtCards(_ setGame: SetGame) {
+        updateButtons(buttons, withCards: setGame.dealtCards)
+        showGameResult(setGame)
+        updateScoreLabel(withScore: setGame.score)
+        dealButton.isEnabled = isDealButtonEnabled(setGame)
     }
+    
+    func didStartNewGame(_ setGame: SetGame) {
+        replaceButtonsAndCardIndices(withNewCardsIndices: setGame.dealtCards.indices)
+        updateButtons(buttons, withCards: setGame.dealtCards)
+        updateScoreLabel(withScore: setGame.score)
+        dealButton.isEnabled = isDealButtonEnabled(setGame)
+    }
+    
+    @IBOutlet private var buttons: [CardButton]!
     @IBOutlet weak var dealButton: UIButton!
     @IBOutlet weak var scoreLabel: UILabel!
     
@@ -31,81 +40,84 @@ class SetController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setGame.dealCards(.atGameBegining)
-        
+        setGame.delegate = self
+        setGame.startNewGame()
     }
     
     @IBAction func dealThreeMoreCardsIsPressed() {
-        setGame.dealCards(.duringTheGame)
+        setGame.dealThreeCards()
     }
+    
     @IBAction func cardButtonIsPressed(_ sender: CardButton) {
         if let buttonIndex = buttons.firstIndex(of: sender),
             let cardIndex = buttonsAndCardsIndices[buttonIndex] {
             setGame.choseCard(atIndex: cardIndex)
         }
     }
+    
     @IBAction func newGameButtonIsPressed() {
         setGame.startNewGame()
-        setGame.dealCards(.atGameBegining)
     }
 }
 
 extension SetController {
-    private func updateButtonsAndCardsIndices() {
-        let dealtCardsCount = setGame.dealtCards.count
-        let numberOfCardsShownByButtons = buttonsAndCardsIndices.count
-        let numberOfAddedCards = dealtCardsCount - numberOfCardsShownByButtons
-        if dealtCardsCount == 0 {
-            buttonsAndCardsIndices = [:]
-        } else if numberOfAddedCards > 0 {
-            let allButtonIndicesShuffled = Set(buttons.indices.shuffled())
-            let buttonIndecesInUse = Set(buttonsAndCardsIndices.keys)
-            let freeButtonIndices = allButtonIndicesShuffled.subtracting(buttonIndecesInUse)
-            let buttonIndicesForNewCards = freeButtonIndices.suffix(numberOfAddedCards)
-            let newCardsIndices = setGame.dealtCards.indices.map { $0 }.suffix(numberOfAddedCards)
-            let buttonIndicesAndNewCardsIndices = zip(buttonIndicesForNewCards, newCardsIndices)
-            buttonsAndCardsIndices.merge(buttonIndicesAndNewCardsIndices, uniquingKeysWith: { $1 })
-        }
-    }
-    private func updateButtons(with updateButton: (CardButton, CardIndex?) -> ()...) {
-        for (buttonIndex, button) in buttons.enumerated() {
-            let cardIndex = buttonsAndCardsIndices[buttonIndex]
-            for function in updateButton {
-                function(button,cardIndex)
-            }
-        }
-    }
-    typealias CardIndex = Int
-    private func updateCardsAvailability(button: CardButton, cardIndex: CardIndex?) {
-        switch cardIndex {
-        case nil: button.cardDispayMode = .notDisplayed
-        case let index? where !setGame[index].isActive: button.cardDispayMode = .notDisplayed
-        case let index?:
-            let card = setGame[index]
-            let str = makeAttributedString(forCard: card)
-            button.cardDispayMode = .isDisplayed(attributeString: str)
-        }
-    }
-    private func updateCardSelection(button: CardButton, cardIndex: CardIndex?) {
-        if let cardIndex = cardIndex {
-            let card = setGame[cardIndex]
-            button.isSelected = card.isSelected
+    private func isDealButtonEnabled(_ game: SetGame) -> Bool {
+        if game.result != .matched {
+            return game.dealtCards.count < buttons.count
         } else {
-            return
+            return game.deckOfUndealtCards.count > 0
         }
     }
-    private func updateResultOfCardSelection(button: CardButton, cardIndex: CardIndex?) {
-        if let cardIndex = cardIndex {
-            if setGame[cardIndex].isSelected {
-                switch setGame.matchState {
+    private func updateButtonsAndCardIndices(withNewCardsIndices indices: Range<Int>) {
+        let freeButtonIndicesShuffled = Set(buttons.indices).subtracting(buttonsAndCardsIndices.keys).shuffled()
+        let newButtonsIndices = freeButtonIndicesShuffled.prefix(indices.count)
+        let buttonsAndCardIndices = zip(newButtonsIndices, indices)
+        buttonsAndCardsIndices.merge(buttonsAndCardIndices, uniquingKeysWith: { $1 })
+    }
+    private func replaceButtonsAndCardIndices(withNewCardsIndices indices: Range<Int>) {
+        buttonsAndCardsIndices = [:]
+        let numberOfDealtCards = indices.count
+        let buttonIndices = buttons.indices.shuffled().prefix(numberOfDealtCards)
+        let buttonsAndCardIndices = zip(buttonIndices, indices)
+        buttonsAndCardsIndices = Dictionary(uniqueKeysWithValues: buttonsAndCardIndices)
+    }
+    
+    private func updateButtons(_ cardButtons: [CardButton], withCards cards: [Card]) {
+          for (index, button) in cardButtons.enumerated() {
+              if let cardIndex = buttonsAndCardsIndices[index] {
+                  updateCardButton(button: button, withCard: cards[cardIndex])
+              } else {
+                  button.cardDispayMode = .noCard
+              }
+          }
+      }
+    
+    private func updateCardButton(button: CardButton, withCard card: Card) {
+        let str = makeAttributedString(forCard: card)
+        switch card.state {
+        case .incative:
+            button.cardDispayMode = .inactive(attributeString: str)
+        case .selected:
+            button.cardDispayMode = .selected(attributeString: str)
+        case .unselected:
+            button.cardDispayMode = .unselected(attributeString: str)
+        }
+    }
+    
+    private func showGameResult(_ game: SetGame) {
+        for (buttonIndex, button) in buttons.enumerated() {
+            if let cardIndex = buttonsAndCardsIndices[buttonIndex], game[cardIndex].state == .selected {
+                switch game.result {
                 case .matched: button.backgroundHighlight = .green
                 case .misMatched: button.backgroundHighlight = .red
                 case .inProcessOfMatching: button.backgroundHighlight = .plain
                 }
-            } else {
-                button.backgroundHighlight = .plain
             }
         }
+    }
+    
+    private func updateScoreLabel(withScore score: Int) {
+          scoreLabel.text = "Score: \(score)"
     }
     
     private func makeAttributedString(forCard card: Card) -> NSMutableAttributedString {
@@ -157,7 +169,5 @@ extension SetController {
         return attribute
     }
     
-    private func updateScoreLabel() {
-        scoreLabel.text = "Score: \(setGame.score)"
-    }
+
 }
