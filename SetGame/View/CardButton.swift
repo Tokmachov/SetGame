@@ -24,8 +24,9 @@ class CardButton: UIButton {
         didSet {
             switch backgroundHighlight {
             case .plain: self.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
-            case .green: self.backgroundColor = UIColor.green
-            case .red: self.backgroundColor = UIColor.red
+            case .matched: self.backgroundColor = UIColor.green
+            case .mismatched: self.backgroundColor = UIColor.red
+            case .highlightedForCheating: self.backgroundColor = UIColor.orange
             }
         }
     }
@@ -34,6 +35,7 @@ class CardButton: UIButton {
         self.layer.borderWidth = 0.0
         self.backgroundColor = UIColor.clear
         self.setAttributedTitle(nil, for: .normal)
+        self.setTitle(nil, for: .normal)
     }
     private func showSelected(str: NSMutableAttributedString) {
         self.layer.borderWidth = 3.0
@@ -53,6 +55,7 @@ class CardButton: UIButton {
             self.layer.borderWidth = 1.0
             self.layer.borderColor = UIColor.orange.cgColor
             self.titleLabel?.backgroundColor = UIColor.clear
+            self.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
             self.setAttributedTitle(str, for: .normal)
     }
     
@@ -72,7 +75,7 @@ class CardButton: UIButton {
 }
 extension CardButton {
     enum  BackgroundColor {
-        case plain, red, green
+        case plain, mismatched, matched, highlightedForCheating
     }
     enum CardDisplayMode {
         case unselected(attributeString: NSMutableAttributedString)

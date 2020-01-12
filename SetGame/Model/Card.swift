@@ -9,17 +9,23 @@
 import Foundation
 
 struct Card {
-    let traitOne: TraitState
-    let traitTwo: TraitState
-    let traitThree: TraitState
-    let traitFour: TraitState
+    let traitOne: Int
+    let traitTwo: Int
+    let traitThree: Int
+    let traitFour: Int
     
     var state = CardState.unselected
     
-    enum TraitState:  Int, CaseIterable {
-        case firstState = 1, secondState, thirdState
-    }
     enum CardState {
         case selected, unselected, incative
+    }
+}
+
+extension Card: Equatable {
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.traitOne == rhs.traitOne &&
+            lhs.traitTwo == rhs.traitTwo &&
+            lhs.traitThree == rhs.traitThree &&
+            lhs.traitFour == rhs.traitFour
     }
 }

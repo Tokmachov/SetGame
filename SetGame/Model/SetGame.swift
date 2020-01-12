@@ -10,10 +10,11 @@ import Foundation
 
 struct SetGame {
     
-    // Public API
-    var delegate: SetGameDelegate!
+    private var deckOfUndealtCards = [Card]()
     
-    var deckOfUndealtCards = [Card]()
+    // Public API
+    weak var delegate: SetGameDelegate!
+    weak var computerPlayerDelegate: ComputerPlayerDelegate!
     
     var dealtCards = [Card]()
     
@@ -21,28 +22,28 @@ struct SetGame {
         return dealtCards[cardIndex]
     }
     
-    var result: MatchState {
-        switch  selectedCards.count {
-        case 3: return areMatch(selectedCards) ? .matched : .misMatched
-        default: return .inProcessOfMatching
+    var result: MoveResult {
+        if selectedCards.count == 3 {
+            return areMatch(selectedCards) ? .matched : .misMatched
+        } else {
+            return .inProcessOfMatching
         }
     }
-    
-    var score: Int = 0
+    var userScore: Int = 0
+    var computerScore: Int = 0
+    var cheatCount = 0
     
     mutating func dealThreeCards() {
         if result == .matched {
             substituteMatchedCardsForNewOnesOrDeactivateThem()
             delegate.didUpdateDealtCards(self)
         } else {
-            let cardsToDeal = deckOfUndealtCards.prefix(3)
-            deckOfUndealtCards.removeFirst(3)
-            dealtCards.append(contentsOf: cardsToDeal)
+            moveCardsFromDeckToDealtCards(numberOfCards: 3)
             let newCardsIndices = dealtCards.indices.suffix(3)
             delegate.didAddNewCards(self, newCardsIndices: newCardsIndices)
         }
     }
-
+    
     mutating func choseCard(atIndex index: Int) {
         assert(dealtCards.indices.contains(index), "Index passed to SetGame.choseCard(atIndex:) is out of SetGame.dealtCards indeces range.")
         let card = dealtCards[index]
@@ -59,50 +60,55 @@ struct SetGame {
                 dealtCards[index].state = .selected
             }
         }
-        score = newScore()
+        userScore = newScore()
         delegate.didUpdateDealtCards(self)
+        
+        if result != .inProcessOfMatching {
+            delegate.didEndTurn(self)
+            delegate.didStartTurn(self)
+        }
+        if result == .misMatched {
+            computerPlayerDelegate.didReactOnMismatch(self)
+        }
     }
     mutating func startNewGame() {
         dealtCards.removeAll()
         deckOfUndealtCards = CardsFactory.makeAllPossibleCardsInRandomOrder()
-        let cardToDealAtTheBeginningOfGame = deckOfUndealtCards.prefix(12)
-        dealtCards.append(contentsOf: cardToDealAtTheBeginningOfGame)
-        deckOfUndealtCards.removeFirst(12)
-        score = 0
-        delegate.didStartNewGame(self)
+        moveCardsFromDeckToDealtCards(numberOfCards: 12)
+        userScore = 0
+        computerScore = 0
+        delegate.didEndTurn(self)
+        delegate.didStartNewGame(self, newCardsIndices: dealtCards.indices)
+        delegate.didStartTurn(self)
+    }
+    mutating func getIndicesOfThreeMatchedCards() -> [Int]? {
+        computerPlayerDelegate.didReactOnCheating(self)
+        cheatCount += 1
+        let indices = indicesOfThreeMatchedCards()
+        return indices
+    }
+    
+    // Computer methods
+    mutating func letComputerMakeMove() {
+        delegate.didEndTurn(self)
+        if let indices = indicesOfThreeMatchedCards() {
+            deselectAllCards()
+            indices.forEach { dealtCards[$0].state = .selected }
+            delegate.didUpdateDealtCards(self)
+            computerScore += 1
+            computerPlayerDelegate.didEndMove(self, withResult: true)
+        } else {
+            computerPlayerDelegate.didEndMove(self, withResult: false)
+        }
+        delegate.didStartTurn(self)
+    }
+    func sayHello() {
+        computerPlayerDelegate.didSayHello(self)
     }
 }
 
 extension SetGame {
-    private struct CardsFactory {
-        private static var firstTraitStates = Card.TraitState.allCases
-        private static var secondTraitStates = Card.TraitState.allCases
-        private static var thirdTraitStates = Card.TraitState.allCases
-        private static var forthTraitStates = Card.TraitState.allCases
-        
-        static func makeAllPossibleCardsInRandomOrder() ->[Card] {
-            var cards = [Card]()
-            for firstTraitState in firstTraitStates {
-                for secondTraitState in secondTraitStates {
-                    for thirdTraitState in thirdTraitStates {
-                        for forthTraitState in forthTraitStates {
-                            let card = Card(
-                                traitOne: firstTraitState,
-                                traitTwo: secondTraitState,
-                                traitThree: thirdTraitState,
-                                traitFour: forthTraitState
-                            )
-                            cards.append(card)
-                        }
-                    }
-                }
-            }
-            return cards.shuffled()
-        }
-    }
-}
-extension SetGame {
-    enum MatchState {
+    enum MoveResult {
         case matched, misMatched, inProcessOfMatching
     }
 }
@@ -113,16 +119,16 @@ extension SetGame {
         return dealtCards.filter { $0.state == .selected }
     }
     private func areMatch(_ cards: [Card]) -> Bool {
-//        let traitOneCount = Set(cards.map { $0.traitFour }).count
-//        let traitTwoCount = Set(cards.map { $0.traitOne }).count
-//        let traitThreeCount = Set(cards.map { $0.traitThree }).count
-//        let traitFourCount = Set(cards.map { $0.traitTwo }).count
-//        
-//        let isSetByTraightOne = (traitOneCount == 3 || traitOneCount == 1)
-//        let isSetByTraightTwo = (traitTwoCount == 3 || traitTwoCount == 1)
-//        let isSetByTraightThree = (traitThreeCount == 3 || traitThreeCount == 1)
-//        let isSetByTraightFour = (traitFourCount == 3 || traitFourCount == 1)
-        return true//isSetByTraightOne && isSetByTraightTwo && isSetByTraightThree && isSetByTraightFour
+        let traitOneCount = Set(cards.map { $0.traitOne }).count
+        let traitTwoCount = Set(cards.map { $0.traitTwo }).count
+        let traitThreeCount = Set(cards.map { $0.traitThree }).count
+        let traitFourCount = Set(cards.map { $0.traitFour }).count
+        
+        let isSetByTraightOne = (traitOneCount == 3 || traitOneCount == 1)
+        let isSetByTraightTwo = (traitTwoCount == 3 || traitTwoCount == 1)
+        let isSetByTraightThree = (traitThreeCount == 3 || traitThreeCount == 1)
+        let isSetByTraightFour = (traitFourCount == 3 || traitFourCount == 1)
+        return isSetByTraightOne && isSetByTraightTwo && isSetByTraightThree && isSetByTraightFour
     }
     private mutating func deselectAllCards() {
         for index in dealtCards.indices where dealtCards[index].state == .selected {
@@ -138,18 +144,70 @@ extension SetGame {
             }
         }
     }
+    private mutating func moveCardsFromDeckToDealtCards(numberOfCards: Int) {
+        let cardsToDeal = deckOfUndealtCards.prefix(numberOfCards)
+        deckOfUndealtCards.removeFirst(numberOfCards)
+        dealtCards.append(contentsOf: cardsToDeal)
+    }
     private func newScore() -> Int {
         switch result {
-        case .matched: return score + 1
-        case .misMatched: return score - 1
-        default: return score
+        case .matched: return userScore + 1
+        case .misMatched: return userScore - 1
+        default: return userScore
         }
+    }
+
+    private func kCombinations<T: Equatable> (k: Int, chosenFrom elements: [T]) -> [[T]] {
+        var outputCombinations = elements.map { [$0] }
+        repeat {
+            var temp = [[T]]()
+            for el in outputCombinations {
+                let startingElementOfElementsToFormCombinationsWith = el.last!
+                let elemetsToFormCombinationsWith = [T](elements.drop { $0 != startingElementOfElementsToFormCombinationsWith }.dropFirst())
+                guard !elemetsToFormCombinationsWith.isEmpty else { continue }
+                temp += combinations(of: el, andElements: elemetsToFormCombinationsWith)
+            }
+            outputCombinations = temp
+        } while outputCombinations.first!.count != k
+        return outputCombinations
+    }
+    
+    private func indicesOfThreeMatchedCards() -> [Int]? {
+        let activeCards = dealtCards.filter { $0.state != .incative }
+        let cardCombos = kCombinations(k: 3, chosenFrom: activeCards)
+        for cardCombo in cardCombos {
+            if areMatch(cardCombo) {
+                var indices = [Int]()
+                for card in cardCombo {
+                    let index = dealtCards.firstIndex(of: card)!
+                    indices.append(index)
+                }
+                return indices
+            }
+        }
+        return nil
+    }
+    private func combinations<T: Equatable>(of initialCombination: [T], andElements elements: [T]) -> [[T]] {
+        var output = [[T]]()
+        for element in elements {
+            let newCombination = initialCombination + [element]
+            output.append(newCombination)
+        }
+        return output
     }
 }
 
-protocol SetGameDelegate {
-    func didStartNewGame(_ setGame: SetGame)
+protocol SetGameDelegate: AnyObject {
+    func didStartNewGame(_ setGame: SetGame, newCardsIndices: Range<Int>)
     func didAddNewCards(_ setGame: SetGame, newCardsIndices: Range<Int>)
     func didUpdateDealtCards(_ setGame: SetGame)
+    func didStartTurn(_ setGame: SetGame)
+    func didEndTurn(_ setGame: SetGame)
 }
 
+protocol ComputerPlayerDelegate: AnyObject {
+    func didReactOnCheating(_ computerPlayer: SetGame)
+    func didReactOnMismatch(_ computerPlayer: SetGame)
+    func didEndMove(_ computerPlayer: SetGame, withResult isSuccess: Bool)
+    func didSayHello(_ computerPlayer: SetGame)
+}
