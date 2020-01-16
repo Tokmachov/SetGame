@@ -36,7 +36,7 @@ struct SetGame {
     mutating func dealThreeCards() {
         if result == .matched {
             substituteMatchedCardsForNewOnesOrDeactivateThem()
-            delegate.didUpdateDealtCards(self)
+            delegate.didUpdateGame(self)
         } else {
             moveCardsFromDeckToDealtCards(numberOfCards: 3)
             let newCardsIndices = dealtCards.indices.suffix(3)
@@ -46,31 +46,36 @@ struct SetGame {
     
     mutating func choseCard(atIndex index: Int) {
         assert(dealtCards.indices.contains(index), "Index passed to SetGame.choseCard(atIndex:) is out of SetGame.dealtCards indeces range.")
-        let card = dealtCards[index]
-        switch (result, card.state) {
-        case (_, .incative): break
-        case (.inProcessOfMatching, .unselected): dealtCards[index].state = .selected
-        case (.inProcessOfMatching,.selected): dealtCards[index].state = .unselected
-        case (.misMatched, _):
-            deselectAllCards()
-            dealtCards[index].state = .selected
-        case (.matched, _):
+        if result == .matched {
             substituteMatchedCardsForNewOnesOrDeactivateThem()
-            if dealtCards[index].state == .unselected {
-                dealtCards[index].state = .selected
-            }
-        }
-        userScore = newScore()
-        delegate.didUpdateDealtCards(self)
-        
-        if result != .inProcessOfMatching {
             delegate.didEndTurn(self)
             delegate.didStartTurn(self)
         }
-        if result == .misMatched {
-            computerPlayerDelegate.didReactOnMismatch(self)
+        manageSelection(forCardAtIndex: index)
+        userScore = newScore()
+        delegate.didUpdateGame(self)
+        computerPlayerReaction(forMoveResut: self.result)
+    }
+    private mutating func manageSelection(forCardAtIndex index: Int) {
+        if selectedCards.count == 3 {
+            deselectAllCards()
+            
+        }
+        let cardState = dealtCards[index].state
+        switch cardState {
+        case .selected: dealtCards[index].state = .unselected
+        case .unselected: dealtCards[index].state = .selected
+        default: break
         }
     }
+    private func computerPlayerReaction(forMoveResut result: SetGame.MoveResult) {
+        switch result {
+        case .misMatched:
+            computerPlayerDelegate.didReactOnMismatch(self)
+        default: break
+        }
+    }
+    
     mutating func startNewGame() {
         dealtCards.removeAll()
         deckOfUndealtCards = CardsFactory.makeAllPossibleCardsInRandomOrder()
@@ -94,7 +99,7 @@ struct SetGame {
         if let indices = indicesOfThreeMatchedCards() {
             deselectAllCards()
             indices.forEach { dealtCards[$0].state = .selected }
-            delegate.didUpdateDealtCards(self)
+            delegate.didUpdateGame(self)
             computerScore += 1
             computerPlayerDelegate.didEndMove(self, withResult: true)
         } else {
@@ -200,7 +205,7 @@ extension SetGame {
 protocol SetGameDelegate: AnyObject {
     func didStartNewGame(_ setGame: SetGame, newCardsIndices: Range<Int>)
     func didAddNewCards(_ setGame: SetGame, newCardsIndices: Range<Int>)
-    func didUpdateDealtCards(_ setGame: SetGame)
+    func didUpdateGame(_ setGame: SetGame)
     func didStartTurn(_ setGame: SetGame)
     func didEndTurn(_ setGame: SetGame)
 }

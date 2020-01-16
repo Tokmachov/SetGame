@@ -26,10 +26,11 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupButtons()
         setGame.delegate = self
         setGame.computerPlayerDelegate = self
-        setGame.startNewGame()
         gameTimer.delegate = self
+        setGame.startNewGame()
     }
     
     //MARK: SetGameDelegate
@@ -40,7 +41,7 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
         giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.result)
     }
     
-    func didUpdateDealtCards(_ setGame: SetGame) {
+    func didUpdateGame(_ setGame: SetGame) {
         updateCardButtons(withCards: setGame.dealtCards)
         showGameResult(setGame)
         updateScoreLabel(withScore: setGame.userScore)
@@ -291,6 +292,14 @@ extension SetController {
         }
         return attribute
     }
-    
-
+    private func setupButtons() {
+        buttons.forEach {
+            $0.titleLabel?.numberOfLines = 0
+            $0.titleLabel?.adjustsFontSizeToFitWidth = true
+            $0.titleLabel?.minimumScaleFactor = 0.05
+            $0.titleLabel?.textAlignment = .center
+            $0.contentVerticalAlignment = .fill
+            $0.titleEdgeInsets = UIEdgeInsets(top: 1, left: 2, bottom: 1, right: 2)
+        }
+    }
 }
