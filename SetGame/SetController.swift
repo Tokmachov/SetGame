@@ -37,16 +37,16 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
     func didAddNewCards(_ setGame: SetGame, newCardsIndices: Range<Int>) {
         updateButtonsAndCardIndices(withNewCardsIndices: newCardsIndices)
         updateCardButtons(withCards: setGame.dealtCards)
-        dealButton.isEnabled = isDealButtonEnabled(setGame.result, numberOfDealtCards: setGame.dealtCards.count)
-        giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.result)
+        dealButton.isEnabled = isDealButtonEnabled(setGame.moveResult, numberOfDealtCards: setGame.dealtCards.count)
+        giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.moveResult)
     }
     
     func didUpdateGame(_ setGame: SetGame) {
         updateCardButtons(withCards: setGame.dealtCards)
         showGameResult(setGame)
         updateScoreLabel(withScore: setGame.userScore)
-        dealButton.isEnabled = isDealButtonEnabled(setGame.result, numberOfDealtCards: setGame.dealtCards.count)
-        giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.result)
+        dealButton.isEnabled = isDealButtonEnabled(setGame.moveResult, numberOfDealtCards: setGame.dealtCards.count)
+        giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.moveResult)
     }
     
     func didStartNewGame(_ setGame: SetGame, newCardsIndices: Range<Int>) {
@@ -54,8 +54,8 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
         updateCardButtons(withCards: setGame.dealtCards)
         updateScoreLabel(withScore: setGame.userScore)
         updateComputerScoreLabel(withScore: setGame.computerScore)
-        dealButton.isEnabled = isDealButtonEnabled(setGame.result, numberOfDealtCards: setGame.dealtCards.count)
-        giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.result)
+        dealButton.isEnabled = isDealButtonEnabled(setGame.moveResult, numberOfDealtCards: setGame.dealtCards.count)
+        giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.moveResult)
         totalTimeSpent = 0
         gameTimer.startGameTimer()
     }
@@ -145,7 +145,7 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
     @IBAction func cardButtonIsPressed(_ sender: CardButton) {
         if let buttonIndex = buttons.firstIndex(of: sender),
             let cardIndex = buttonsAndCardsIndices[buttonIndex] {
-            setGame.choseCard(atIndex: cardIndex)
+            setGame.choseCard(at: cardIndex)
         }
     }
     
@@ -225,7 +225,7 @@ extension SetController {
     private func showGameResult(_ game: SetGame) {
         for (buttonIndex, button) in buttons.enumerated() {
             if let cardIndex = buttonsAndCardsIndices[buttonIndex], game[cardIndex].state == .selected {
-                switch game.result {
+                switch game.moveResult {
                 case .matched: button.backgroundHighlight = .matched
                 case .misMatched: button.backgroundHighlight = .mismatched
                 case .inProcessOfMatching: button.backgroundHighlight = .plain
