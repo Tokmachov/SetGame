@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, ComputerPlayerDelegate {
+class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, ComputerPlayerDelegate, PlayingFieldDelegate {
   
     private var setGame = SetGame()
     private var gameTimer = GameTimer()
@@ -26,35 +26,31 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtons()
+        playingFieldView.delegate = self
         setGame.delegate = self
         setGame.computerPlayerDelegate = self
         gameTimer.delegate = self
         setGame.startNewGame()
     }
-    
+    //MARK: PlayingFieldViewDelegate
+    func didTap(_ playingFieldView: PlayingFieldView, cardAtIndex index: Int) {
+        setGame.choseCard(at: index)
+    }
     //MARK: SetGameDelegate
-    func didAddNewCards(_ setGame: SetGame, newCardsIndices: Range<Int>) {
-        updateButtonsAndCardIndices(withNewCardsIndices: newCardsIndices)
-        updateCardButtons(withCards: setGame.dealtCards)
-        dealButton.isEnabled = isDealButtonEnabled(setGame.moveResult, numberOfDealtCards: setGame.dealtCards.count)
-        giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.moveResult)
-    }
-    
+
     func didUpdateGame(_ setGame: SetGame) {
-        updateCardButtons(withCards: setGame.dealtCards)
-        showGameResult(setGame)
+        updateCards(from: setGame)
         updateScoreLabel(withScore: setGame.userScore)
-        dealButton.isEnabled = isDealButtonEnabled(setGame.moveResult, numberOfDealtCards: setGame.dealtCards.count)
+        showGameResult(setGame)
+        dealButton.isEnabled = isDealButtonEnabled(setGame)
         giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.moveResult)
     }
     
-    func didStartNewGame(_ setGame: SetGame, newCardsIndices: Range<Int>) {
-        replaceButtonsAndCardIndices(withNewCardsIndices: newCardsIndices)
-        updateCardButtons(withCards: setGame.dealtCards)
+    func didStartNewGame(_ setGame: SetGame) {
+        updateCards(from: setGame)
         updateScoreLabel(withScore: setGame.userScore)
         updateComputerScoreLabel(withScore: setGame.computerScore)
-        dealButton.isEnabled = isDealButtonEnabled(setGame.moveResult, numberOfDealtCards: setGame.dealtCards.count)
+        dealButton.isEnabled = isDealButtonEnabled(setGame)
         giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.moveResult)
         totalTimeSpent = 0
         gameTimer.startGameTimer()
@@ -111,6 +107,7 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
     func didSayHello(_ computerPlayer: SetGame) {
         computerFaceLabel.text = "🤗"
         updateComputerFaceTostandardEmotion()
+        
     }
     private func updateComputerFaceTostandardEmotion() {
         Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { [weak self] _ in
@@ -120,11 +117,12 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
     }
     @IBOutlet weak var scoreLabel: UILabel!
     
+    @IBOutlet weak var playingFieldView: PlayingFieldView! 
+    
     //MARK: Buttons labels
     @IBOutlet weak var giveUpButton: UIButton!
     @IBOutlet weak var timerButton: UIButton!
     @IBOutlet weak var dealButton: UIButton!
-    @IBOutlet private var buttons: [CardButton]!
     
     //MARK: Timer labels
     @IBOutlet weak var totalTimeLabel: UILabel!
@@ -134,19 +132,11 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
     @IBOutlet weak var computerFaceLabel: UILabel!
     @IBOutlet weak var computerScoreLabel: UILabel!
     
-    
     private var buttonsAndCardsIndices = [Int : Int]()
     
     //MARK: Actions
     @IBAction func dealThreeMoreCardsIsPressed() {
         setGame.dealThreeCards()
-    }
-    
-    @IBAction func cardButtonIsPressed(_ sender: CardButton) {
-        if let buttonIndex = buttons.firstIndex(of: sender),
-            let cardIndex = buttonsAndCardsIndices[buttonIndex] {
-            setGame.choseCard(at: cardIndex)
-        }
     }
     
     @IBAction func newGameButtonIsPressed() {
@@ -173,11 +163,41 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
 }
 
 extension SetController {
-    private func isDealButtonEnabled(_ moveResult: SetGame.MoveResult, numberOfDealtCards: Int) -> Bool {
-        switch moveResult {
-        case .matched: return true
-        default: return numberOfDealtCards < buttons.count
+    private func updateCards(from game: SetGame) {
+        var shapeViews = [ShapeView]()
+        for card in game.dealtCards {
+            let view = shapeView(for: card)
+            shapeViews.append(view)
         }
+        playingFieldView.cardViews = shapeViews
+    }
+    private func shapeView(for card: Card) -> ShapeView {
+        let shapeView: ShapeView
+        switch card.traitOne {
+        case 1: shapeView = CardViewsFactoy.makeCardView(type: .diamond)
+        case 2: shapeView = CardViewsFactoy.makeCardView(type: .oval)
+        case 3: shapeView = CardViewsFactoy.makeCardView(type: .squiggle)
+        default: shapeView = CardViewsFactoy.makeCardView(type: .squiggle)
+        }
+        shapeView.numberOfShapes = card.traitTwo
+        switch card.traitThree {
+        case 1: shapeView.shading = .filled
+        case 2: shapeView.shading = .unfilled
+        case 3: shapeView.shading = .stripped
+        default: break
+        }
+        switch card.traitFour {
+        case 1: shapeView.shapeColor = UIColor.purple
+        case 2: shapeView.shapeColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        case 3: shapeView.shapeColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        default: break
+        }
+        shapeView.isSelected = card.isSelected
+        return shapeView
+    }
+    
+    private func isDealButtonEnabled(_ game: SetGame) -> Bool {
+        return !game.deckOfCards.isEmpty
     }
     private func isGiveUpButtonEnabled(_ moveResult: SetGame.MoveResult) -> Bool {
         switch moveResult {
@@ -185,51 +205,13 @@ extension SetController {
         default: return true
         }
     }
-    private func updateButtonsAndCardIndices(withNewCardsIndices indices: Range<Int>) {
-        let freeButtonIndicesShuffled = Set(buttons.indices).subtracting(buttonsAndCardsIndices.keys).shuffled()
-        let newButtonsIndices = freeButtonIndicesShuffled.prefix(indices.count)
-        let buttonsAndCardIndices = zip(newButtonsIndices, indices)
-        buttonsAndCardsIndices.merge(buttonsAndCardIndices, uniquingKeysWith: { $1 })
-    }
-    private func replaceButtonsAndCardIndices(withNewCardsIndices indices: Range<Int>) {
-        buttonsAndCardsIndices = [:]
-        let numberOfDealtCards = indices.count
-        let buttonIndices = buttons.indices.shuffled().prefix(numberOfDealtCards)
-        let buttonsAndCardIndices = zip(buttonIndices, indices)
-        buttonsAndCardsIndices = Dictionary(uniqueKeysWithValues: buttonsAndCardIndices)
-    }
-    
-    private func updateCardButtons(withCards cards: [Card]) {
-          for (index, button) in buttons.enumerated() {
-              if let cardIndex = buttonsAndCardsIndices[index] {
-                let card = cards[cardIndex]
-                updateCardButton(button: button, withCard: card)
-              } else {
-                  button.cardDispayMode = .noCard
-              }
-          }
-      }
-    
-    private func updateCardButton(button: CardButton, withCard card: Card) {
-        let str = makeAttributedString(forCard: card)
-        switch card.state {
-        case .incative:
-            button.cardDispayMode = .inactive(attributeString: str)
-        case .selected:
-            button.cardDispayMode = .selected(attributeString: str)
-        case .unselected:
-            button.cardDispayMode = .unselected(attributeString: str)
-        }
-    }
-    
+
     private func showGameResult(_ game: SetGame) {
-        for (buttonIndex, button) in buttons.enumerated() {
-            if let cardIndex = buttonsAndCardsIndices[buttonIndex], game[cardIndex].state == .selected {
-                switch game.moveResult {
-                case .matched: button.backgroundHighlight = .matched
-                case .misMatched: button.backgroundHighlight = .mismatched
-                case .inProcessOfMatching: button.backgroundHighlight = .plain
-                }
+        for view in playingFieldView.cardViews where view.isSelected {
+            switch game.moveResult {
+            case .matched: view.highlight = .green
+            case .misMatched: view.highlight = .red
+            case .inProcessOfMatching: view.highlight = .plain
             }
         }
     }
@@ -240,66 +222,10 @@ extension SetController {
     private func updateComputerScoreLabel(withScore score: Int) {
         computerScoreLabel.text = "\(score)"
     }
-    private func highlightCardsForCheating(withIndices indices: [Int]) {
-        for (buttonIndex, button) in buttons.enumerated() {
-            if let cardIndex = buttonsAndCardsIndices[buttonIndex], indices.contains(cardIndex) {
-                button.backgroundHighlight = .highlightedForCheating
-            }
-        }
-    }
     
-    private func makeAttributedString(forCard card: Card) -> NSMutableAttributedString {
-        let shapeString = produceShapeString(cardTraitOne: card.traitOne, cardTraitTwo: card.traitTwo)
-        let attrString = NSMutableAttributedString(string: shapeString)
-        let range = NSRange(location: 0, length: shapeString.count)
-        let shadingAttribute = produceShadingAtribute(forCardTraitThree: card.traitThree)
-        let colorAttribute = produceColorAttribute(cardTraitFour: card.traitFour, cardTraitThree: card.traitThree)
-        let fontAttribute: [NSAttributedString.Key : Any] = [.font : UIFont.systemFont(ofSize: 18)]
-        attrString.addAttributes(shadingAttribute, range: range)
-        attrString.addAttributes(colorAttribute, range: range)
-        attrString.addAttributes(fontAttribute, range: range)
-        return attrString
-    }
-    private func produceShapeString(cardTraitOne: Int, cardTraitTwo: Int) -> String {
-        let shapesCount = cardTraitOne
-        let shapes = ["▲", "●", "■"]
-        assert([1,2,3].contains(cardTraitTwo), "Card.traitTwo value \(cardTraitTwo) is not suitable as index for shapes: \(shapes.indices)")
-        let shape = shapes[cardTraitTwo - 1]
-        let resultingShapeString = String(String(repeating: shape + "\n", count: shapesCount).dropLast(1))
-        return resultingShapeString
-    }
-    private func produceShadingAtribute(forCardTraitThree trait: Int) -> [NSAttributedString.Key : Any] {
-        let attribute: [NSAttributedString.Key : Any]
-        assert((1...3).contains(trait), "Card.traightThree must be betwee 1 and 3 ")
-        switch trait {
-        case 1: attribute = [.strokeWidth : 6]
-        case 2: attribute = [.strokeWidth : -0.5]
-        case 3: attribute = [.strokeWidth : -0.5]
-        default: attribute = [:]
-        }
-        return attribute
-    }
-    private func produceColorAttribute(cardTraitFour: Int, cardTraitThree: Int) -> [NSAttributedString.Key : Any] {
-        assert((1...3).contains(cardTraitFour) && (1...3).contains(cardTraitFour), "Card.traightFour,Card.traightThree  must be betwee 1 and 3 ")
-        var alpha: CGFloat = 1.0
-        if cardTraitThree == 3 { alpha = 0.3 }
-        let attribute: [NSAttributedString.Key : Any]
-        switch cardTraitFour {
-        case 1: attribute = [.foregroundColor :  #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1).withAlphaComponent(alpha)]
-        case 2: attribute = [.foregroundColor :  #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(alpha)]
-        case 3: attribute = [.foregroundColor :  #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1).withAlphaComponent(alpha)]
-        default: attribute = [:]
-        }
-        return attribute
-    }
-    private func setupButtons() {
-        buttons.forEach {
-            $0.titleLabel?.numberOfLines = 0
-            $0.titleLabel?.adjustsFontSizeToFitWidth = true
-            $0.titleLabel?.minimumScaleFactor = 0.05
-            $0.titleLabel?.textAlignment = .center
-            $0.contentVerticalAlignment = .fill
-            $0.titleEdgeInsets = UIEdgeInsets(top: 1, left: 2, bottom: 1, right: 2)
-        }
+    private func highlightCardsForCheating(withIndices indices: [Int]) {
+        indices.forEach { playingFieldView[$0].highlight = .orange }
     }
 }
+
+

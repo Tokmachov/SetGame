@@ -14,11 +14,7 @@ struct Card {
     let traitThree: Int
     let traitFour: Int
     
-    var state = CardState.unselected
-    
-    enum CardState {
-        case selected, unselected, incative
-    }
+    var isSelected = false
 }
 
 extension Card: Equatable {

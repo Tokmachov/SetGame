@@ -11,12 +11,11 @@ import Foundation
 /// Describes model of game Set.
 struct SetGame {
     
-    private var deckOfCards = [Card]()
-    
     // Public API
     weak var delegate: SetGameDelegate!
     weak var computerPlayerDelegate: ComputerPlayerDelegate!
     
+    var deckOfCards = [Card]()
     var dealtCards = [Card]()
     var moveResult: MoveResult {
         if selectedCards.count == 3 {
@@ -33,32 +32,26 @@ struct SetGame {
        subscript(cardIndex: Int) -> Card {
            return dealtCards[cardIndex]
        }
-    /**
-    if 'moveResult' value is '.matched': 1) substitutes selected cards for ones taken from deckOfCards
-    2) reports to 'delegate' that dealtCards were updated;
-    otherwise: 1) removes three cards from 'deckOfCards' and adds them to dealtCards 2) reports indices of added cards to delegate.
-    */
-    mutating func dealThreeCards() {
-        if moveResult == .matched {
-            substituteMatchedCardsForNewOnesOrDeactivateThem()
-            delegate.didUpdateGame(self)
-        } else {
-            moveCardsFromDeckToDealtCards(numberOfCards: 3)
-            let newCardsIndices = dealtCards.indices.suffix(3)
-            delegate.didAddNewCards(self, newCardsIndices: newCardsIndices)
-        }
-    }
-    /**Substitutes selected cards for new ones in 'dealtCards' if 'moveResult' value is '.matched';
-    manages cards selection;
-    updates 'gameScore';
-    reports to 'delegate' that changes are made to model by selection
     
-     - Parameter index: index of card in 'dealtCards'
-    */
+    mutating func dealThreeCards() {
+        assert(deckOfCards.count != 1 || dealtCards.count != 2, "Deck of cards has 1 or 2 cards. Impossible.")
+        switch moveResult {
+        case .matched where !deckOfCards.isEmpty: substituteThreeMatchedCardsForNewOnes()
+        case .matched where deckOfCards.isEmpty: dealtCards.removeAll { $0.isSelected }
+        case .misMatched where !deckOfCards.isEmpty: moveCardsFromDeckToDealtCards(numberOfCards: 3)
+        case .inProcessOfMatching where !deckOfCards.isEmpty: moveCardsFromDeckToDealtCards(numberOfCards: 3)
+        default: break
+        }
+        delegate.didUpdateGame(self)
+    }
+ 
     mutating func choseCard(at index: Int) {
-        assert(dealtCards.indices.contains(index), "Index passed to SetGame.choseCard(atIndex:) is out of SetGame.dealtCards indeces range.")
         if moveResult == .matched {
-            substituteMatchedCardsForNewOnesOrDeactivateThem()
+            if deckOfCards.count >= 3 {
+                substituteThreeMatchedCardsForNewOnes()
+            } else {
+                dealtCards.removeAll { $0.isSelected }
+            }
             delegate.didEndTurn(self)
             delegate.didStartTurn(self)
         }
@@ -68,14 +61,6 @@ struct SetGame {
         computerPlayerReaction(forMoveResut: self.moveResult)
     }
     
-    /**Removes all cards from 'dealtcards';
-    populates 'deckOfCards' with 81 new cards in random order;
-    moves 12 cards from 'deckOfCards' to 'dealtCards';
-    sets 'userScore' to 0;
-    sets 'computerScore' to 0;
-    reports end of turn to 'delegate';
-    reports start of new game to 'delegate';
-    reports start of new turn to 'delegate'. */
     mutating func startNewGame() {
         dealtCards.removeAll()
         deckOfCards = CardsFactory.makeAllPossibleCardsInRandomOrder()
@@ -83,7 +68,7 @@ struct SetGame {
         userScore = 0
         computerScore = 0
         delegate.didEndTurn(self)
-        delegate.didStartNewGame(self, newCardsIndices: dealtCards.indices)
+        delegate.didStartNewGame(self)
         delegate.didStartTurn(self)
     }
     
@@ -99,18 +84,12 @@ struct SetGame {
     }
     
     //MARK: Computer player methods
-    
-    /**Reports end of turn to 'delegate';
-    deselects all cards;
-    selects matched cards, reports cards update to 'delegate',
-    increments 'computerScore', reports end of succesful move to 'computerPlayerDelegate',
-    if matched cards indices were obtained;
-    or reports end of unsuccesful move to 'computerDelegate'.*/
+
     mutating func letComputerMakeMove() {
         delegate.didEndTurn(self)
         deselectAllCards()
         if let indices = indicesOfThreeMatchedCards() {
-            indices.forEach { dealtCards[$0].state = .selected }
+            indices.forEach { dealtCards[$0].isSelected = true }
             delegate.didUpdateGame(self)
             computerScore += 1
             computerPlayerDelegate.didEndMove(self, withResult: true)
@@ -135,20 +114,15 @@ extension SetGame {
 extension SetGame {
     
     private var selectedCards: [Card] {
-        return dealtCards.filter { $0.state == .selected }
+        return dealtCards.filter { $0.isSelected }
     }
     
     private mutating func manageSelection(forCardAt index: Int) {
         if selectedCards.count == 3 {
             deselectAllCards()
-            
         }
-        let cardState = dealtCards[index].state
-        switch cardState {
-        case .selected: dealtCards[index].state = .unselected
-        case .unselected: dealtCards[index].state = .selected
-        default: break
-        }
+        guard dealtCards.indices.contains(index) else { return }
+        dealtCards[index].isSelected = !dealtCards[index].isSelected
     }
     /// Invokes methods of self.computerPlayerDelegate based on self.result.
     private func computerPlayerReaction(forMoveResut result: SetGame.MoveResult) {
@@ -177,21 +151,18 @@ extension SetGame {
         return isSetByTraightOne && isSetByTraightTwo && isSetByTraightThree && isSetByTraightFour
     }
     private mutating func deselectAllCards() {
-        for index in dealtCards.indices where dealtCards[index].state == .selected {
-            dealtCards[index].state = .unselected
+        for index in dealtCards.indices where dealtCards[index].isSelected {
+            dealtCards[index].isSelected = false
         }
     }
-    private mutating func substituteMatchedCardsForNewOnesOrDeactivateThem() {
-        for (i, card) in dealtCards.enumerated() where card.state == .selected {
-            if let newCard = deckOfCards.popLast() {
-                dealtCards[i] = newCard
-            } else {
-                dealtCards[i].state = .incative
-            }
+    private mutating func substituteThreeMatchedCardsForNewOnes() {
+        for (i, card) in dealtCards.enumerated() where card.isSelected {
+            let newCard = deckOfCards.removeLast()
+            dealtCards[i] = newCard
         }
     }
+
     private mutating func moveCardsFromDeckToDealtCards(numberOfCards: Int) {
-        guard !deckOfCards.isEmpty else { return }
         let cardsToDeal = deckOfCards.prefix(numberOfCards)
         deckOfCards.removeFirst(numberOfCards)
         dealtCards.append(contentsOf: cardsToDeal)
@@ -225,8 +196,7 @@ extension SetGame {
         return indices
     }
     private func findThreeMatchedCards() -> [Card]? {
-        let activeCards = dealtCards.filter { $0.state != .incative }
-        let cardCombos = kCombinations(k: 3, chosenFrom: activeCards)
+        let cardCombos = kCombinations(k: 3, chosenFrom: dealtCards)
         for cardCombo in cardCombos {
             if areMatch(cardCombo) {
                 return cardCombo
@@ -255,8 +225,7 @@ extension SetGame {
 }
 
 protocol SetGameDelegate: AnyObject {
-    func didStartNewGame(_ setGame: SetGame, newCardsIndices: Range<Int>)
-    func didAddNewCards(_ setGame: SetGame, newCardsIndices: Range<Int>)
+    func didStartNewGame(_ setGame: SetGame)
     func didUpdateGame(_ setGame: SetGame)
     func didStartTurn(_ setGame: SetGame)
     func didEndTurn(_ setGame: SetGame)
