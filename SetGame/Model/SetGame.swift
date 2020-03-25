@@ -82,7 +82,10 @@ struct SetGame {
         guard let indices = indicesOfThreeMatchedCards() else { return nil }
         return indices
     }
-    
+    mutating func shuffleCards() {
+        dealtCards.shuffle()
+        delegate.didShuffleCards(self)
+    }
     //MARK: Computer player methods
 
     mutating func letComputerMakeMove() {
@@ -229,6 +232,7 @@ protocol SetGameDelegate: AnyObject {
     func didUpdateGame(_ setGame: SetGame)
     func didStartTurn(_ setGame: SetGame)
     func didEndTurn(_ setGame: SetGame)
+    func didShuffleCards(_ setGame: SetGame)
 }
 
 protocol ComputerPlayerDelegate: AnyObject {

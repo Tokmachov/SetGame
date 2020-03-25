@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -13,211 +13,248 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="SetController" customModule="SetGame" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="L4m-XB-qCr">
-                                <rect key="frame" x="16" y="20" width="343" height="627"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="GRG-B2-O7c" userLabel="GameControls">
+                                <rect key="frame" x="0.0" y="621" width="414" height="115"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="o88-Ig-3K0">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="98"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jMR-cP-Pyw">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="33"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4MT-kE-bkr">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="98"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kql-MI-yCM">
-                                                        <rect key="frame" x="0.0" y="0.0" width="167.5" height="27.5"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Счет:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Gl-HE-XHQ">
-                                                                <rect key="frame" x="0.0" y="0.0" width="114.5" height="27.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k3x-Zf-3Zb">
-                                                                <rect key="frame" x="114.5" y="0.0" width="53" height="27.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pix-3m-s1S">
-                                                        <rect key="frame" x="0.0" y="35.5" width="167.5" height="27"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Общее время:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zVV-rC-IeQ">
-                                                                <rect key="frame" x="0.0" y="0.0" width="114.5" height="27"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Usr-tU-f3e">
-                                                                <rect key="frame" x="114.5" y="0.0" width="53" height="27"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gEg-WL-SlP">
-                                                        <rect key="frame" x="0.0" y="70.5" width="167.5" height="27.5"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Время хода:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Gc-QA-8SZ">
-                                                                <rect key="frame" x="0.0" y="0.0" width="114.5" height="27.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pi4-Op-W2j">
-                                                                <rect key="frame" x="114.5" y="0.0" width="53" height="27.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="9Gc-QA-8SZ" firstAttribute="width" secondItem="zVV-rC-IeQ" secondAttribute="width" id="iW0-1B-Ihj"/>
-                                                    <constraint firstItem="zVV-rC-IeQ" firstAttribute="width" secondItem="1Gl-HE-XHQ" secondAttribute="width" id="vlU-s4-7PG"/>
-                                                </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Ck-tT-mqi">
-                                                <rect key="frame" x="175.5" y="0.0" width="167.5" height="98"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="6Yy-UR-Lrp">
-                                                        <rect key="frame" x="0.0" y="0.0" width="167.5" height="98"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="😀" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KY8-Mw-PQO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="41"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="34"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Счет компьютера:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gUc-ej-Eoz">
-                                                                <rect key="frame" x="0.0" y="49" width="167.5" height="20.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIw-Uh-dHB">
-                                                                <rect key="frame" x="0.0" y="77.5" width="167.5" height="20.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                </subviews>
-                                            </stackView>
+                                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQN-9K-cGW">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="33"/>
+                                                <color key="backgroundColor" red="1" green="0.2527923882" blue="1" alpha="0.29620612157534248" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Новая игра">
+                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="newGameButtonIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="xKa-HY-pkC"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3Rc-WD-1D4" userLabel="Cards">
-                                        <rect key="frame" x="0.0" y="106" width="343" height="407"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cSx-Q2-6s0">
+                                        <rect key="frame" x="0.0" y="41" width="414" height="33"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g83-wt-QWn" customClass="PlayingFieldView" customModule="SetGame" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="343" height="407"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                            </view>
+                                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7F-wP-Iij">
+                                                <rect key="frame" x="0.0" y="0.0" width="203" height="33"/>
+                                                <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="0.45015517979452052" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Cheat">
+                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="cheatButtonIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="FqF-IS-n0E"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M9j-Tr-ccL">
+                                                <rect key="frame" x="211" y="0.0" width="203" height="33"/>
+                                                <color key="backgroundColor" red="0.57919406890000003" green="0.1280144453" blue="0.57268613580000005" alpha="0.37248501712328769" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Остановить таймер">
+                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="pauseTimerButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Evl-YQ-w8W"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
+                                        <variation key="heightClass=compact"/>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="r4e-uJ-WGg" userLabel="GameControlls">
-                                        <rect key="frame" x="0.0" y="521" width="343" height="106"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hCf-jP-kd4">
+                                        <rect key="frame" x="0.0" y="82" width="414" height="33"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="s4t-mQ-zLp">
-                                                <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r3T-Nr-DGj">
-                                                        <rect key="frame" x="0.0" y="0.0" width="167.5" height="30"/>
-                                                        <color key="backgroundColor" red="1" green="0.2527923882" blue="1" alpha="0.24842144691780821" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <state key="normal" title="Новая игра">
-                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="newGameButtonIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ndy-Pj-QBP"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tRN-gI-qjc">
-                                                        <rect key="frame" x="175.5" y="0.0" width="167.5" height="30"/>
-                                                        <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="0.22046232876712329" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <state key="normal" title="Выдать 3 карты">
-                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="dealThreeMoreCardsIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="a4W-7c-66C"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="nkd-I4-otT">
-                                                <rect key="frame" x="0.0" y="38" width="343" height="30"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUo-zn-Z4m">
-                                                        <rect key="frame" x="0.0" y="0.0" width="167.5" height="30"/>
-                                                        <color key="backgroundColor" red="1" green="0.2527923882" blue="1" alpha="0.3435627140410959" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <state key="normal" title="Cheat!">
-                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="cheatButtonIsPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="Mcm-0Q-aTd"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L81-Ca-Fj7">
-                                                        <rect key="frame" x="175.5" y="0.0" width="167.5" height="30"/>
-                                                        <color key="backgroundColor" red="1" green="0.2527923882" blue="1" alpha="0.24842144690000001" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <state key="normal" title="Остановить таймер">
-                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="pauseTimerButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WiH-Wm-fsA"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ROc-yM-Qc5">
-                                                <rect key="frame" x="0.0" y="76" width="343" height="30"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zgC-1A-UyQ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
-                                                        <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="0.27514982876712329" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <state key="normal" title="Сдаюсь!">
-                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="giveUpButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="i36-in-JkM"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
+                                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T8T-lP-RRE">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="33"/>
+                                                <color key="backgroundColor" red="0.0" green="0.99143940210000003" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Сдаюсь">
+                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="giveUpButtonIsPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YRL-2e-Zqe"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="J5x-d1-Ed4" userLabel="ComputerScore">
+                                <rect key="frame" x="212" y="0.0" width="202" height="77"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😀" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Sm-7j-UEz">
+                                        <rect key="frame" x="0.0" y="0.0" width="202" height="20.333333333333332"/>
+                                        <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="0.36239833047945208" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Счет компьютера:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fGB-uZ-OwY">
+                                        <rect key="frame" x="0.0" y="28.333333333333336" width="202" height="20.333333333333336"/>
+                                        <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="0.57189105308219179" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cJm-Vy-65e">
+                                        <rect key="frame" x="0.0" y="56.666666666666664" width="202" height="20.333333333333336"/>
+                                        <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="0.6603702910958904" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ehF-0q-HQs" userLabel="MainStack">
+                                <rect key="frame" x="0.0" y="87" width="414" height="524"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HRz-Lw-cYN" customClass="PlayingFieldView" customModule="SetGame" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="524"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Leq-fB-gpb" userLabel="GameScore">
+                                <rect key="frame" x="0.0" y="0.0" width="202" height="77"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="gwJ-5t-oF8">
+                                        <rect key="frame" x="0.0" y="0.0" width="202" height="20.333333333333332"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Счет" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKz-QL-zFt">
+                                                <rect key="frame" x="0.0" y="0.0" width="114.66666666666667" height="20.333333333333332"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="0.44030928938356162" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7r1-tp-eri">
+                                                <rect key="frame" x="122.66666666666669" y="0.0" width="79.333333333333314" height="20.333333333333332"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="0.87302011986301364" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="0oE-np-fN8">
+                                        <rect key="frame" x="0.0" y="28.333333333333336" width="202" height="20.333333333333336"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Общее время:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bzY-QL-Q0Z">
+                                                <rect key="frame" x="0.0" y="0.0" width="114.66666666666667" height="20.333333333333332"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="0.79216609589041098" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxq-SP-IoO">
+                                                <rect key="frame" x="122.66666666666669" y="0.0" width="79.333333333333314" height="20.333333333333332"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="0.87302011986301364" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="b2a-Ya-7c1">
+                                        <rect key="frame" x="0.0" y="56.666666666666664" width="202" height="20.333333333333336"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Время хода:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n42-cM-olw">
+                                                <rect key="frame" x="0.0" y="0.0" width="114.66666666666667" height="20.333333333333332"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="0.87302011986301364" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mTD-wh-PMR">
+                                                <rect key="frame" x="122.66666666666669" y="0.0" width="79.333333333333314" height="20.333333333333332"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="0.87302011986301364" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="cKz-QL-zFt" firstAttribute="width" secondItem="bzY-QL-Q0Z" secondAttribute="width" id="KDq-Gj-7tB"/>
+                                    <constraint firstItem="cKz-QL-zFt" firstAttribute="width" secondItem="n42-cM-olw" secondAttribute="width" id="Ma4-CP-opz"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="L4m-XB-qCr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="7JF-cs-RWy"/>
-                            <constraint firstItem="L4m-XB-qCr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="BmK-p0-GYX"/>
-                            <constraint firstItem="L4m-XB-qCr" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="U8l-6I-1N7"/>
-                            <constraint firstItem="L4m-XB-qCr" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="nBV-r7-2Yn"/>
+                            <constraint firstItem="ehF-0q-HQs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="1ON-tA-CkD"/>
+                            <constraint firstItem="GRG-B2-O7c" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="2NO-aB-ytM"/>
+                            <constraint firstItem="Leq-fB-gpb" firstAttribute="top" secondItem="GRG-B2-O7c" secondAttribute="top" id="4in-0a-KSx"/>
+                            <constraint firstItem="J5x-d1-Ed4" firstAttribute="bottom" secondItem="Leq-fB-gpb" secondAttribute="bottom" id="4nj-ho-J8W"/>
+                            <constraint firstItem="ehF-0q-HQs" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="6JX-jO-l0f"/>
+                            <constraint firstItem="J5x-d1-Ed4" firstAttribute="width" secondItem="Leq-fB-gpb" secondAttribute="width" id="7AI-GQ-SaD"/>
+                            <constraint firstItem="J5x-d1-Ed4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="BJ9-9i-3Mr"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GRG-B2-O7c" secondAttribute="trailing" id="E0l-oM-RnN"/>
+                            <constraint firstItem="Leq-fB-gpb" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="JEi-xP-Y9F"/>
+                            <constraint firstItem="J5x-d1-Ed4" firstAttribute="leading" secondItem="Leq-fB-gpb" secondAttribute="trailing" constant="10" id="JP8-VM-CJP"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Leq-fB-gpb" secondAttribute="bottom" id="Jp1-Gf-rkw"/>
+                            <constraint firstItem="GRG-B2-O7c" firstAttribute="top" secondItem="ehF-0q-HQs" secondAttribute="bottom" constant="10" id="NGJ-EL-dw8"/>
+                            <constraint firstItem="Leq-fB-gpb" firstAttribute="top" secondItem="J5x-d1-Ed4" secondAttribute="top" id="T59-OX-jvn"/>
+                            <constraint firstItem="GRG-B2-O7c" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="UMp-94-Kjt"/>
+                            <constraint firstItem="GRG-B2-O7c" firstAttribute="leading" secondItem="J5x-d1-Ed4" secondAttribute="trailing" constant="10" id="Vf5-EU-jPt"/>
+                            <constraint firstItem="Leq-fB-gpb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="bWT-cO-H2M"/>
+                            <constraint firstItem="Leq-fB-gpb" firstAttribute="width" secondItem="GRG-B2-O7c" secondAttribute="width" id="cUG-as-GEQ"/>
+                            <constraint firstItem="J5x-d1-Ed4" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="f1s-85-j0x"/>
+                            <constraint firstItem="GRG-B2-O7c" firstAttribute="top" secondItem="ehF-0q-HQs" secondAttribute="bottom" constant="10" id="gIA-2a-b5F"/>
+                            <constraint firstItem="ehF-0q-HQs" firstAttribute="top" secondItem="Leq-fB-gpb" secondAttribute="bottom" constant="10" id="lVi-dx-l0h"/>
+                            <constraint firstItem="Leq-fB-gpb" firstAttribute="bottom" secondItem="J5x-d1-Ed4" secondAttribute="bottom" id="tRd-9N-xlx"/>
+                            <constraint firstItem="ehF-0q-HQs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="uNj-tn-jUi"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Jp1-Gf-rkw"/>
+                                <exclude reference="1ON-tA-CkD"/>
+                                <exclude reference="4in-0a-KSx"/>
+                                <exclude reference="T59-OX-jvn"/>
+                                <exclude reference="cUG-as-GEQ"/>
+                                <exclude reference="tRd-9N-xlx"/>
+                                <exclude reference="NGJ-EL-dw8"/>
+                                <exclude reference="Vf5-EU-jPt"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact">
+                            <mask key="constraints">
+                                <include reference="Jp1-Gf-rkw"/>
+                                <include reference="1ON-tA-CkD"/>
+                                <exclude reference="lVi-dx-l0h"/>
+                                <include reference="4in-0a-KSx"/>
+                                <exclude reference="JEi-xP-Y9F"/>
+                                <include reference="T59-OX-jvn"/>
+                                <include reference="cUG-as-GEQ"/>
+                                <include reference="tRd-9N-xlx"/>
+                                <exclude reference="4nj-ho-J8W"/>
+                                <exclude reference="BJ9-9i-3Mr"/>
+                                <exclude reference="f1s-85-j0x"/>
+                                <include reference="NGJ-EL-dw8"/>
+                                <exclude reference="UMp-94-Kjt"/>
+                                <include reference="Vf5-EU-jPt"/>
+                                <exclude reference="gIA-2a-b5F"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
-                        <outlet property="computerFaceLabel" destination="KY8-Mw-PQO" id="g3i-j9-5Hc"/>
-                        <outlet property="computerScoreLabel" destination="dIw-Uh-dHB" id="pX5-LY-OcF"/>
-                        <outlet property="currentTurnTimeLabel" destination="pi4-Op-W2j" id="F5F-C6-YOW"/>
-                        <outlet property="dealButton" destination="tRN-gI-qjc" id="9Ac-Ih-akC"/>
-                        <outlet property="giveUpButton" destination="zgC-1A-UyQ" id="7gb-bx-cXX"/>
-                        <outlet property="playingFieldView" destination="g83-wt-QWn" id="a4N-U9-BS9"/>
-                        <outlet property="scoreLabel" destination="k3x-Zf-3Zb" id="ASc-SV-gGX"/>
-                        <outlet property="timerButton" destination="L81-Ca-Fj7" id="7P2-tC-jal"/>
-                        <outlet property="totalTimeLabel" destination="Usr-tU-f3e" id="HC0-L6-lnk"/>
+                        <outlet property="computerFaceLabel" destination="7Sm-7j-UEz" id="2ew-Ev-Zsa"/>
+                        <outlet property="computerScoreLabel" destination="cJm-Vy-65e" id="bk2-c3-JVH"/>
+                        <outlet property="currentTurnTimeLabel" destination="mTD-wh-PMR" id="okm-eN-LUG"/>
+                        <outlet property="giveUpButton" destination="T8T-lP-RRE" id="vKk-VU-r5H"/>
+                        <outlet property="playingFieldView" destination="HRz-Lw-cYN" id="Cge-pS-ala"/>
+                        <outlet property="scoreLabel" destination="7r1-tp-eri" id="ZKi-yG-I1i"/>
+                        <outlet property="timerButton" destination="M9j-Tr-ccL" id="a0I-Gs-TB7"/>
+                        <outlet property="totalTimeLabel" destination="sxq-SP-IoO" id="iHJ-vt-VIE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="128.80000000000001" y="-69.715142428785612"/>
+            <point key="canvasLocation" x="146.17691154422789" y="-188"/>
         </scene>
     </scenes>
 </document>

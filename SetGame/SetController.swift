@@ -9,7 +9,7 @@
 import UIKit
 
 class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, ComputerPlayerDelegate, PlayingFieldDelegate {
-  
+    
     private var setGame = SetGame()
     private var gameTimer = GameTimer()
     
@@ -42,7 +42,6 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
         updateCards(from: setGame)
         updateScoreLabel(withScore: setGame.userScore)
         showGameResult(setGame)
-        dealButton.isEnabled = isDealButtonEnabled(setGame)
         giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.moveResult)
     }
     
@@ -50,7 +49,6 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
         updateCards(from: setGame)
         updateScoreLabel(withScore: setGame.userScore)
         updateComputerScoreLabel(withScore: setGame.computerScore)
-        dealButton.isEnabled = isDealButtonEnabled(setGame)
         giveUpButton.isEnabled = isGiveUpButtonEnabled(setGame.moveResult)
         totalTimeSpent = 0
         gameTimer.startGameTimer()
@@ -65,7 +63,10 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
         totalTimeSpent += timeSpentInTurn
         timeSpentInTurn = 0
     }
-    
+    func didShuffleCards(_ setGame: SetGame) {
+        updateCards(from: setGame)
+        showGameResult(setGame)
+    }
     //MARK: GameTimerDelegate
     func didFireAfterOneSecondOfMove(_ gameTimer: GameTimer) {
         timeSpentInTurn += 1
@@ -115,29 +116,29 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
             self.computerFaceLabel.text = "😀"
         }
     }
+    //MARK: Labels
     @IBOutlet weak var scoreLabel: UILabel!
     
-    @IBOutlet weak var playingFieldView: PlayingFieldView! 
+    @IBOutlet weak var playingFieldView: PlayingFieldView! {
+        didSet {
+            let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeOccurd(_:)))
+            downSwipe.direction = .down
+            playingFieldView.addGestureRecognizer(downSwipe)
+            let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotationGestureOccured(_:)))
+            playingFieldView.addGestureRecognizer(rotationGesture)
+        }
+    }
     
-    //MARK: Buttons labels
     @IBOutlet weak var giveUpButton: UIButton!
     @IBOutlet weak var timerButton: UIButton!
-    @IBOutlet weak var dealButton: UIButton!
     
-    //MARK: Timer labels
     @IBOutlet weak var totalTimeLabel: UILabel!
     @IBOutlet weak var currentTurnTimeLabel: UILabel!
     
-    //MARK: Computer player labels
     @IBOutlet weak var computerFaceLabel: UILabel!
     @IBOutlet weak var computerScoreLabel: UILabel!
     
-    private var buttonsAndCardsIndices = [Int : Int]()
-    
     //MARK: Actions
-    @IBAction func dealThreeMoreCardsIsPressed() {
-        setGame.dealThreeCards()
-    }
     
     @IBAction func newGameButtonIsPressed() {
         setGame.startNewGame()
@@ -159,6 +160,16 @@ class SetController: UIViewController, SetGameDelegate, GameTimerDelegate, Compu
     }
     @IBAction func giveUpButtonIsPressed(_ sender: UIButton) {
         setGame.letComputerMakeMove()
+    }
+    @objc func swipeOccurd(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended && isPossibleToDealThreeMoreCards(setGame) {
+            setGame.dealThreeCards()
+        }
+    }
+    @objc func rotationGestureOccured(_ sender: UIRotationGestureRecognizer) {
+        if sender.state == .ended {
+            setGame.shuffleCards()
+        }
     }
 }
 
@@ -186,17 +197,12 @@ extension SetController {
         case 3: shapeView.shading = .stripped
         default: break
         }
-        switch card.traitFour {
-        case 1: shapeView.shapeColor = UIColor.purple
-        case 2: shapeView.shapeColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-        case 3: shapeView.shapeColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
-        default: break
-        }
+        shapeView.color = ShapeView.ShapeColor(rawValue: card.traitFour)!
         shapeView.isSelected = card.isSelected
         return shapeView
     }
     
-    private func isDealButtonEnabled(_ game: SetGame) -> Bool {
+    private func isPossibleToDealThreeMoreCards(_ game: SetGame) -> Bool {
         return !game.deckOfCards.isEmpty
     }
     private func isGiveUpButtonEnabled(_ moveResult: SetGame.MoveResult) -> Bool {

@@ -10,57 +10,52 @@ import UIKit
 
 @IBDesignable
 class ShapeView: UIView {
-    var shapeColor: UIColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1) { didSet { setNeedsDisplay() } }
+    var color: ShapeColor = ShapeColor.firstColor { didSet { setNeedsDisplay() } }
     var numberOfShapes: Int = 3 { didSet { setNeedsDisplay() } }
     var shading: Shading = .stripped { didSet { setNeedsDisplay() } }
-    var highlight: Highlight = .plain {
-        didSet {
-            switch highlight {
-            case .plain: backgroundColor = #colorLiteral(red: 0.8374180198, green: 0.8374378085, blue: 0.8374271393, alpha: 1).withAlphaComponent(0.4)
-            case .green: backgroundColor = UIColor.green.withAlphaComponent(0.4)
-            case .red: backgroundColor = UIColor.red.withAlphaComponent(0.4)
-            case .orange: backgroundColor = UIColor.orange.withAlphaComponent(0.4)
-            }
+    var highlight: Highlight = .plain { didSet { setNeedsDisplay() } }
+    var isSelected: Bool = false { didSet { setNeedsDisplay() } }
+    
+    override func draw(_ rect: CGRect) {
+        drawSelection(in: rect)
+        drawHighlight(in: rect)
+        drawShape(in: rect)
+        drawShading(in: rect)
+    }
+    
+    func shapePath(in rects: [CGRect]) -> UIBezierPath {
+        return UIBezierPath()
+    }
+    
+    private func drawSelection(in rect: CGRect) {
+        if isSelected {
+            let path = UIBezierPath(
+                roundedRect: rect.inset(by: ShapeSizes.selectionFrameInsets),
+                cornerRadius: ShapeSizes.selectionFrameCornerRadius
+            )
+            path.lineWidth = ShapeSizes.selectionFrameLineWidth
+            ShapeSizes.selectionFrameColor.setStroke()
+            path.stroke()
         }
     }
-    var isSelected: Bool = false { didSet { setNeedsDisplay() } }
-    override func draw(_ rect: CGRect) {
+    private func drawHighlight(in rect: CGRect) {
+        let highlightPath = UIBezierPath(
+            roundedRect: rect.inset(by: ShapeSizes.selectionFrameInsets),
+            cornerRadius: ShapeSizes.selectionFrameCornerRadius
+        )
+        highlight.color.setFill()
+        highlightPath.fill()
+    }
+    private func drawShape(in rect: CGRect) {
         let grid = makeGrid(rect: rect, numberOfShapes: numberOfShapes)
-        //Draw selection
-        if isSelected {
-            let path = UIBezierPath(roundedRect: rect.inset(by: ShapeSizes.cardRectInsets), cornerRadius: ShapeSizes.selectionFrameCornerRadius)
-            path.lineWidth = ShapeSizes.selectionFrameLineWidth
-            UIColor.blue.setStroke()
-            highlight.color.setFill()
-            path.stroke()
-            path.fill()
-        } else {
-            let path = UIBezierPath(roundedRect: rect.inset(by: ShapeSizes.cardRectInsets), cornerRadius: ShapeSizes.selectionFrameCornerRadius)
-            highlight.color.setFill()
-            path.fill()
-        }
-            // Draw shape
         let rects = (0..<numberOfShapes).map {
             grid[$0]!.inset(by: ShapeSizes.shapeRectInsets)
         }
         let path = shapePath(in: rects)
-        shapeColor.setStroke()
+        color.color.setStroke()
         path.lineWidth = ShapeSizes.shapeLineWidth
         path.addClip()
         path.stroke()
-        //Draw shading
-        switch shading {
-        case .stripped:
-            let path = strippedPath(in: rect)
-            shapeColor.setStroke()
-            path.lineWidth = ShapeSizes.stripingLineWidth
-            path.stroke()
-        case .filled:
-            let path = UIBezierPath(rect: rect)
-            shapeColor.setFill()
-            path.fill()
-        case .unfilled: break
-        }
     }
     private func makeGrid(rect: CGRect, numberOfShapes: Int) -> Grid {
         var grid: Grid
@@ -72,10 +67,20 @@ class ShapeView: UIView {
         grid.cellCount = numberOfShapes
         return grid
     }
-    func shapePath(in rects: [CGRect]) -> UIBezierPath {
-        return UIBezierPath()
+    private func drawShading(in rect: CGRect) {
+        switch shading {
+        case .stripped:
+            let path = strippedPath(in: rect)
+            color.color.setStroke()
+            path.lineWidth = ShapeSizes.stripingLineWidth
+            path.stroke()
+        case .filled:
+            let path = UIBezierPath(rect: rect)
+            color.color.setFill()
+            path.fill()
+        case .unfilled: break
+        }
     }
-    
     private func strippedPath(in rect: CGRect) -> UIBezierPath {
         let path = UIBezierPath()
         if rect.width >= rect.height {
@@ -95,10 +100,12 @@ class ShapeView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.clear
+        contentMode = .redraw
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         backgroundColor = UIColor.clear
+        contentMode = .redraw
     }
 }
 
@@ -110,24 +117,35 @@ extension ShapeView {
         static var horisontalShapeAspectRatio: CGFloat = 2
         static var verticalShapeAspectRatio: CGFloat = 0.5
         static var shapeRectInsets = UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3)
-        static var cardRectInsets = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
-        static var shapeLineWidth: CGFloat = 0.5
-        static var stripingLineWidth: CGFloat = 0.5
-        static var numberOfStrippedLines: CGFloat = 30.0
+        static var selectionFrameInsets = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
+        static var shapeLineWidth: CGFloat = 2
+        static var stripingLineWidth: CGFloat = 1
+        static var numberOfStrippedLines: CGFloat = 20.0
         static var selectionFrameCornerRadius: CGFloat = 10
-        static var selectionFrameLineWidth: CGFloat = 1
-        static var selectionFrameColor = UIColor.blue
+        static var selectionFrameLineWidth: CGFloat = 2
+        static var selectionFrameColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).withAlphaComponent(0.4)
     }
     enum Highlight {
         case plain, red, green, orange
         var color: UIColor {
             switch self {
-            case .plain: return #colorLiteral(red: 0.8374180198, green: 0.8374378085, blue: 0.8374271393, alpha: 1).withAlphaComponent(0.4)
+            case .plain: return #colorLiteral(red: 0.8374180198, green: 0.8374378085, blue: 0.8374271393, alpha: 1).withAlphaComponent(0.3)
             case .green: return UIColor.green.withAlphaComponent(0.4)
-            case .red: return UIColor.red.withAlphaComponent(0.4)
+            case .red: return #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1).withAlphaComponent(0.4)
             case .orange: return UIColor.orange.withAlphaComponent(0.4)
             }
         }
+    }
+    enum ShapeColor: Int {
+        case firstColor = 1, secondColor, thirdColor
+        var color: UIColor {
+            switch self {
+            case .firstColor: return #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
+            case .secondColor: return #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
+            case .thirdColor: return #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+            }
+        }
+        
     }
 }
 class OvalShapeView: ShapeView {

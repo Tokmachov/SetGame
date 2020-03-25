@@ -7,7 +7,7 @@
 //
 
 import UIKit
-@IBDesignable
+
 class PlayingFieldView: UIView {
     var cardViews = [ShapeView]() {
         didSet {
@@ -18,13 +18,21 @@ class PlayingFieldView: UIView {
     weak var delegate: PlayingFieldDelegate?
     
     override func layoutSubviews() {
-        var grid = Grid(layout: .aspectRatio(0.5), frame: bounds)
+        var cellAspectRatio: CGFloat
+        if bounds.width >= bounds.height {
+            cellAspectRatio = 1.5
+        } else {
+            cellAspectRatio = 0.5
+        }
+        var grid = Grid(layout: .aspectRatio(cellAspectRatio), frame: bounds)
         grid.cellCount = cardViews.count
+        
         for (i, cardView) in cardViews.enumerated() {
             let frame = grid[i]!
             cardView.frame = frame
             addSubview(cardView)
         }
+        
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
